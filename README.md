@@ -10,8 +10,12 @@
 
 ### 项目在线查看地址
 
-- https://chb123123.github.io/dome-takeout/
+- https://chb123123.github.io/dome-takeout/dist/
 
 ### 程序使用的技术栈为
 
 vue-cli + vuex + vue-router + element + axios
+
+### 项目接口地址为：
+
+https://github.com/bailicangdu/node-elm/blob/master/API.md
