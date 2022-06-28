@@ -107,7 +107,7 @@ export default {
           display: inline-block;
           padding: 0 0.2667rem;
           color: #CF7227;
-          border-radius: 7px;
+          border-radius: .1867rem;
           background-color: #FFF0DF;
           box-sizing: border-box;
         }

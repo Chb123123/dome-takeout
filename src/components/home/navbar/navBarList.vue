@@ -1,11 +1,21 @@
 <template>
   <div class="box">
-    <div class="navbarContainer">
+    <!-- <div class="navbarContainer">
     <div class="nav" v-for="item in navList" :key="item.id" @click="getNavId(item.id)">
       <img :src="'https://fuss10.elemecdn.com'+ item.image_url" alt="">
       <span class="navtitle">{{ item.title }}</span>
     </div>
+  </div> -->
+  <van-swipe class="my-swipe" indicator-color="white">
+  <van-swipe-item  v-for="i in navList" :key="i.id">
+    <div class="navbarContainer">
+    <div class="nav" v-for="item in i" :key="item.id" @click="getNavId(item.id)">
+      <img :src="'https://fuss10.elemecdn.com'+ item.image_url" alt="">
+      <span class="navtitle">{{ item.title }}</span>
+    </div>
   </div>
+  </van-swipe-item>
+</van-swipe>
   </div>
 </template>
 
@@ -24,14 +34,14 @@ export default {
 
 <style lang="less" scoped>
   .box{
-    padding-top: .9333rem;
+    padding-top: .5333rem;
     background-color: white;
     padding-bottom: .8rem;
     .navbarContainer{
     display: flex;
     flex-wrap: wrap;
     width: 18.8rem;
-    height: 16rem;
+    height: 8rem;
     margin: auto;
     .nav{
       display: flex;

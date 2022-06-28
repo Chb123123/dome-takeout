@@ -1,23 +1,19 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import UserView from '../views/UserView.vue'
+import CartView from '../views/CartView.vue'
+import SubmitView from '../views/SubmitView.vue'
+import SubmitArea from '@/components/home/submitArea/submitArea.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
-  {
-    path: '/',
-    name: 'home',
-    component: HomeView
-  },
-  {
-    path: '/about',
-    name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
-  }
+  { path: '/', component: HomeView },
+  { path: '/user', component: UserView },
+  { path: '/cart', component: CartView },
+  { path: '/submit', component: SubmitView },
+  { path: '/submitarea', component: SubmitArea }
 ]
 
 const router = new VueRouter({
