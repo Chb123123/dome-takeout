@@ -158,6 +158,7 @@ export default {
           text-align: center;
           line-height: 1.8667rem;
           border-radius: 1.3333rem;
+          font-size: .64rem;
         }
         .photograph{
           position: absolute;
@@ -176,6 +177,7 @@ export default {
           color: #9C9E9D;
           border-left: .0267rem solid #ccc;
           padding-left: .4rem;
+          font-size: .64rem;
         }
       }
     }
@@ -194,6 +196,7 @@ export default {
         text-align: center;
         border-radius: .2667rem;
         color: #626262;
+        font-size: .64rem;
       }
     }
   }
