@@ -10,8 +10,14 @@
         <div class="delivery">{{ distance }}&nbsp;{{ deliveryTime }}</div>
       </div>
       <div class="delivery">起送￥15</div>
-      <div class="Evaluation">热情掌柜</div>
-      <div class="discount">30-1</div>
+      <div class="Evaluation">
+        <div class="Evaluation1">热情掌柜</div>
+      </div>
+      <div class="discount">
+        <div v-if="discount[0]" class="support" :style="'color:#' + discount[0].icon_color">{{ discount[0].name }}</div>
+        <div v-if="discount[1]" class="support" :style="'color:#' + discount[1].icon_color" >{{ discount[1].name }}</div>
+        <div v-if="discount[2]" class="support" :style="'color:#' + discount[2].icon_color" >{{ discount[2].name }}</div>
+      </div>
     </div>
   </div>
 </template>
@@ -28,7 +34,9 @@ export default {
     // 配送时间
     deliveryTime: {},
     // 配送里程
-    distance: {}
+    distance: {},
+    // 优惠活动
+    discount: {}
   }
 }
 </script>
@@ -93,15 +101,32 @@ export default {
         height: 1.0667rem;
         font-size: .5333rem;
         line-height: 1.0667rem;
-        color: #CF7227;
-        background-color: #FFF0DF;
+        // color: #CF7227;
+        // background-color: #FFF0DF;
+        .Evaluation1{
+          display: inline-block;
+          padding: 0 0.2667rem;
+          color: #CF7227;
+          border-radius: 7px;
+          background-color: #FFF0DF;
+          box-sizing: border-box;
+        }
       }
       .discount{
+        display: flex;
         margin-top: .2667rem;
         height: .8rem;
         line-height: .8rem;
         font-size: .64rem;
         color: red;
+        .support{
+          margin-right: .2667rem;
+          border: .0267rem solid #ccc;
+          padding: .08rem .16rem;
+          border-radius: .2667rem;
+          box-sizing: content-box;
+          line-height: .5333rem;
+        }
       }
     }
   }
