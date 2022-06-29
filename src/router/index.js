@@ -5,6 +5,8 @@ import UserView from '../views/UserView.vue'
 import CartView from '../views/CartView.vue'
 import SubmitView from '../views/SubmitView.vue'
 import SubmitArea from '@/components/home/submitArea/submitArea.vue'
+// 定位城市模块
+import PositionCity from '@/components/home/submitArea/positionCity.vue'
 
 Vue.use(VueRouter)
 
@@ -13,7 +15,8 @@ const routes = [
   { path: '/user', component: UserView },
   { path: '/cart', component: CartView },
   { path: '/submit', component: SubmitView },
-  { path: '/submitarea', component: SubmitArea }
+  { path: '/submitarea', component: SubmitArea },
+  { path: '/positioncity', component: PositionCity }
 ]
 
 const router = new VueRouter({

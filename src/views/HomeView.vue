@@ -38,6 +38,7 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
 // 商品导航栏
 import { getShopNavbar } from '@/api/home/getShopNavbarAPI'
 // 获取商店列表
@@ -69,6 +70,7 @@ export default {
     }
   },
   methods: {
+    ...mapMutations(['newAddress']),
     async getTakeawayAbout () {
       const res = await TackawayAboutList()
       // console.log(res.data)
@@ -102,6 +104,7 @@ export default {
     async getNewCity () {
       const res = await getCurrentAddress()
       this.address = res.data
+      this.newAddress(this.address)
     },
     // 点击跳转到搜索界面
     gotoSubmit () {
