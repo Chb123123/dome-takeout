@@ -49,8 +49,9 @@ export default {
     },
     // 点击搜索推荐地点，获取详情维度
     getDetailedAddress (objsec) {
-      console.log(objsec)
+      // console.log(objsec)
       this.getdetailedAddress(objsec)
+      this.$router.back(-1)
     }
   },
   watch: {
@@ -60,7 +61,7 @@ export default {
       }
       this.flag = setTimeout(async () => {
         const res = await getAddressDetails(this.$store.state.addressDetails.id, this.address)
-        console.log(res)
+        // console.log(res)
         this.addressList = res.data
       }, 500)
     }

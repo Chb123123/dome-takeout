@@ -7,7 +7,8 @@ import SubmitView from '../views/SubmitView.vue'
 import SubmitArea from '@/components/home/submitArea/submitArea.vue'
 // 定位城市模块
 import PositionCity from '@/components/home/submitArea/positionCity.vue'
-
+// 商店详情页
+import shopInterface from '@/components/home/shopInterface/shopInterface.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -16,7 +17,8 @@ const routes = [
   { path: '/cart', component: CartView },
   { path: '/submit', component: SubmitView },
   { path: '/submitarea', component: SubmitArea },
-  { path: '/positioncity', component: PositionCity }
+  { path: '/positioncity', component: PositionCity },
+  { path: '/shopinterface', component: shopInterface }
 ]
 
 const router = new VueRouter({

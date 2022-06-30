@@ -32,14 +32,14 @@ export default {
     },
     async positionCity () {
       const res = await getPositionCity()
-      console.log(res)
+      // console.log(res)
       this.cityList = res.data
       // for (const i in this.cityList) {
       //   console.log(this.cityList[i])
       // }
     },
     addressBtn (step) {
-      console.log(step)
+      // console.log(step)
       this.newAddress(step)
       this.$router.back(-1)
     }

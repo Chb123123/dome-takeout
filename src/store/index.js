@@ -7,7 +7,9 @@ export default new Vuex.Store({
   state: {
     addressDetails: {},
     // 详细地址
-    detailedAddress: {}
+    detailedAddress: null,
+    // 店铺id
+    shop: null
   },
   getters: {
   },
@@ -17,6 +19,9 @@ export default new Vuex.Store({
     },
     getdetailedAddress (state, object) {
       state.detailedAddress = object
+    },
+    getshopid (state, step) {
+      state.shop = step
     }
   },
   actions: {

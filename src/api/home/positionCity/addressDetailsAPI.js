@@ -1,6 +1,6 @@
 import axios from '@/utils/request.js'
 
-// 获取所有城市列表
+// 获取搜索推荐城市详情信息
 export const getAddressDetails = function (id, title) {
   return axios({
     method: 'get',

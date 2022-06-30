@@ -1,5 +1,5 @@
 <template>
-  <div class="takewayContainer">
+  <div class="takewayContainer" @click="getRestaurantId">
     <div class="takeawayImg">
       <img :src="'http://elm.cangdu.org/img/'+ takeawayImg" alt="">
     </div>
@@ -23,6 +23,7 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
 export default {
   props: {
     // 商店名称
@@ -36,7 +37,17 @@ export default {
     // 配送里程
     distance: {},
     // 优惠活动
-    discount: {}
+    discount: {},
+    // 餐馆id
+    restaurant: {}
+  },
+  methods: {
+    ...mapMutations(['getshopid']),
+    getRestaurantId () {
+      this.getshopid(this.restaurant)
+      // console.log(this.restaurantId)
+      this.$router.push('/shopInterface')
+    }
   }
 }
 </script>
