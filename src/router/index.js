@@ -9,6 +9,9 @@ import SubmitArea from '@/components/home/submitArea/submitArea.vue'
 import PositionCity from '@/components/home/submitArea/positionCity.vue'
 // 商店详情页
 import shopInterface from '@/components/home/shopInterface/shopInterface.vue'
+
+// import { createRouter, createWebHashHistory } from 'vue-router'
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -22,8 +25,8 @@ const routes = [
 ]
 
 const router = new VueRouter({
-  mode: 'history',
-  base: process.env.BASE_URL,
+  // mode: 'history',
+  // base: process.env.BASE_URL,
   routes
 })
 
