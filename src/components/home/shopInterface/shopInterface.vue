@@ -164,7 +164,7 @@ export default {
           border-radius: .2667rem;
           line-height: 1.2rem;
           text-align: center;
-          margin-bottom: .5333rem;
+          margin-bottom: .4rem;
           font-size: .6933rem;
         }
         .delivery{
