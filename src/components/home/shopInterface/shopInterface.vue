@@ -59,7 +59,7 @@ export default {
       console.log(res.data)
       // eslint-disable-next-line array-callback-return
       res.data.some((item, index) => {
-        if (index <= 5) {
+        if (index <= 10) {
           this.stopClassification.push(item)
         } else {
           console.log(item, index)
@@ -82,7 +82,12 @@ export default {
 
 <style lang="less" scoped>
   .shopinterfaceContainer{
+    // position: fixed;
+    // left: 50%;
+    // transform: translateX(-50%);
+    max-width: 750px;
     padding-bottom: 2.6667rem;
+    margin: auto;
     .shopBackground{
       position: relative;
       width: 20rem;
@@ -160,6 +165,7 @@ export default {
           line-height: 1.2rem;
           text-align: center;
           margin-bottom: .5333rem;
+          font-size: .6933rem;
         }
         .delivery{
           // height: 35px;

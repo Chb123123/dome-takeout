@@ -88,6 +88,7 @@ export default {
         top: 50%;
         transform: translateY(-50%);
         left: .8rem;
+        font-size: .8rem;
       }
       .move{
           display: inline-block;
@@ -113,6 +114,7 @@ export default {
           border-left: 1px solid #ccc;
           padding-left: .5333rem;
           z-index: 9999;
+          font-size: .64rem;
       }
     }
   }
