@@ -2,8 +2,7 @@
   <div>
     <div class="food" v-for="(item) in foodList.foods" :key="item.id">
       <div class="foodImg">
-        <img v-if="item.image_path" :src="'http://elm.cangdu.org/img/' + item.image_path" alt="">
-        <img v-else src="@/assets/noImg.jpg" alt="">
+        <img :src="'http://elm.cangdu.org/img/' + item.image_path" alt="">
       </div>
       <div class="foodAbout">
         <div class="foodname">{{ item.specfoods[0].name }}</div>

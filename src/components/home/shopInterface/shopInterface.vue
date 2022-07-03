@@ -22,7 +22,7 @@
     <div class="settlement">
       <div class="shoppingicon"><van-icon name="cart" /></div>
       <div class="settlementMoney">
-        <span class="total-price">$0</span>
+        <span class="total-price">${{ sunMoney }}</span>
         <span class="delivery-fee">预计配送费5￥</span>
       </div>
       <div class="money">15元起送</div>
@@ -31,6 +31,7 @@
 </template>
 
 <script>
+import Bus from '@/EventBus/EventBus'
 import { getShopInterface } from '@/api/home/shopInterface/shopInterface'
 import { mapState } from 'vuex'
 import Foods from '@/components/home/shopInterface/foods/foods.vue'
@@ -38,12 +39,19 @@ export default {
   components: {
     Foods
   },
+  // props: {
+  //   money: {
+  //     default: 0
+  //   }
+  // },
   data () {
     return {
       // 商品分类
       stopClassification: [],
       // 初始的商品列表
-      initshop: {}
+      initshop: {},
+      // 需要支付的费用
+      sunMoney: 0
     }
   },
   computed: {
@@ -51,18 +59,18 @@ export default {
   },
   methods: {
     backBtn () {
-      this.$router.back(-1)
+      this.$router.push('/')
     },
     // 获取商店商品列表
     async getShopInterfaceList () {
       const res = await getShopInterface(this.shop.id)
-      console.log(res.data)
+      // console.log(res.data)
       // eslint-disable-next-line array-callback-return
       res.data.some((item, index) => {
         if (index <= 10) {
           this.stopClassification.push(item)
         } else {
-          console.log(item, index)
+          // console.log(item, index)
           return true
         }
       })
@@ -76,6 +84,27 @@ export default {
   },
   created () {
     this.getShopInterfaceList()
+    // eslint-disable-next-line no-unused-expressions
+    // Bus.$on('addCount', (val) => {
+    //   console.log(val)
+    // })
+  },
+  updated () {
+    Bus.$on('addCount', (val) => {
+      console.log(this.initshop.foods)
+      // eslint-disable-next-line array-callback-return
+      this.initshop.foods.some((item) => {
+        if (item.__v >= 0) {
+          if (val[1] === item._id) {
+            item.__v += val[0] - 0
+            this.sunMoney += item.__v * item.specfoods[0].price
+            if (item.__v < 0) {
+              item.__v = 0
+            }
+          }
+        }
+      })
+    })
   }
 }
 </script>
