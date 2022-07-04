@@ -5,6 +5,7 @@
   left-text="返回"
   left-arrow
   fixed
+  :border="false"
   @click-left="onClickLeft"
 />
   <div class="submitAddress">

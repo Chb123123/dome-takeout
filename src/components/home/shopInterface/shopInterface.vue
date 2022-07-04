@@ -13,20 +13,40 @@
       </div>
     </div>
     <div class="commoditys">
-      <p style="margin-left: .6667rem; margin-bottom: .6667rem;">点餐</p>
+      <van-tabs v-model="active" animated>
+        <van-tab title="点餐">
+    <!-- <p style="margin-left: .6667rem; margin-bottom: .6667rem;">点餐</p> -->
       <div class="Classification">
         <span v-for="(item, index) in stopClassification" :key="item.id" @click="targetBtn(index)">{{ item.name }}</span>
       </div>
       <Foods :foodList="initshop"></Foods>
+  </van-tab>
+  <van-tab title="评论">
+    <!-- <p style="margin-left: .6667rem; margin-bottom: .6667rem;">点餐</p> -->
+      <div class="Classification">
+        <span v-for="(item, index) in stopClassification" :key="item.id" @click="targetBtn(index)">{{ item.name }}</span>
+      </div>
+      <Foods :foodList="initshop"></Foods>
+  </van-tab>
+</van-tabs>
     </div>
     <div class="settlement">
-      <div class="shoppingicon"><van-icon name="cart" /></div>
+      <div class="shoppingicon" @click="showAction">
+        <van-icon name="cart" />
+        <div v-if="shopCount != 0" class="shopCount">{{ shopCount }}</div>
+        </div>
       <div class="settlementMoney">
-        <span class="total-price">${{ sunMoney }}</span>
+        <span class="total-price">￥{{ sunMoney }}</span>
         <span class="delivery-fee">预计配送费5￥</span>
       </div>
-      <div class="money">15元起送</div>
+      <div v-if="sunMoney <= 15" class="money">15元起送</div>
+      <div v-else class="goTosettlementMoney">去结算</div>
     </div>
+    <van-action-sheet v-model="show" :closeable="false" title="已选商品">
+  <div class="content">
+    <div class="style"></div>
+  </div>
+</van-action-sheet>
   </div>
 </template>
 
@@ -51,7 +71,13 @@ export default {
       // 初始的商品列表
       initshop: {},
       // 需要支付的费用
-      sunMoney: 0
+      sunMoney: 0,
+      flag: true,
+      // 存储选择商品的数量
+      shopCount: 0,
+      active: 0,
+      // 是否展示下拉菜单
+      show: false
     }
   },
   computed: {
@@ -80,31 +106,55 @@ export default {
     targetBtn (index) {
       console.log(index)
       this.initshop = this.stopClassification[index]
+    },
+    showAction () {
+      this.show = true
     }
   },
   created () {
     this.getShopInterfaceList()
-    // eslint-disable-next-line no-unused-expressions
-    // Bus.$on('addCount', (val) => {
-    //   console.log(val)
-    // })
   },
   updated () {
+    // console.log('11')
     Bus.$on('addCount', (val) => {
-      console.log(this.initshop.foods)
-      // eslint-disable-next-line array-callback-return
-      this.initshop.foods.some((item) => {
-        if (item.__v >= 0) {
-          if (val[1] === item._id) {
-            item.__v += val[0] - 0
-            this.sunMoney += item.__v * item.specfoods[0].price
-            if (item.__v < 0) {
-              item.__v = 0
+      if (this.flag) {
+        this.flag = false
+        // console.log('11')
+        // console.log(this.initshop.foods)
+        // eslint-disable-next-line array-callback-return
+        this.initshop.foods.some((item) => {
+        // if (item.__v >= 0) {
+        //   if (val[1] === item._id) {
+        //     item.__v += val[0] - 0
+        //     this.sunMoney += item.specfoods[0].price
+        //     if (item.__v < 0) {
+        //       item.__v = 0
+        //     }
+        //   }
+        // }
+          if (val[0] > 0) {
+            if (item._id === val[1]) {
+              item.__v += val[0]
+              this.sunMoney += item.specfoods[0].price
+              this.shopCount++
+              return true
+            }
+          } else {
+            if (item._id === val[1]) {
+              if (item.__v > 0) {
+                item.__v += val[0]
+                this.sunMoney -= item.specfoods[0].price
+                // this.flag = true
+                this.shopCount--
+              }
+              return true
             }
           }
-        }
-      })
+        })
+      }
     })
+    console.log(this.shopCount)
+    this.flag = true
   }
 }
 </script>
@@ -114,7 +164,7 @@ export default {
     // position: fixed;
     // left: 50%;
     // transform: translateX(-50%);
-    max-width: 750px;
+    max-width: 20rem;
     padding-bottom: 2.6667rem;
     margin: auto;
     .shopBackground{
@@ -237,6 +287,7 @@ export default {
       background-color: white;
       z-index: 9999;
       .shoppingicon{
+        position: relative;
         float: left;
         width: 3.7333rem;
         height: 2.5333rem;
@@ -244,6 +295,20 @@ export default {
         text-align: center;
         font-size: 1.6rem;
         color: #24ACF2;
+        .shopCount{
+          position: absolute;
+          top: .1333rem;
+          left: 2.5333rem;
+          height: .6667rem;
+          width: .6667rem;
+          // padding: .0533rem .1333rem;
+          line-height: .6667rem;
+          text-align: center;
+          color: white;
+          font-size: .48rem;
+          background-color: red;
+          border-radius: .4rem .4rem .4rem 0;
+        }
       }
       .settlementMoney{
         float: left;
@@ -281,6 +346,29 @@ export default {
         color: white;
         border-radius: 1.3333rem;
         font-size: .8rem;
+      }
+      .goTosettlementMoney{
+        position: absolute;
+        width: 5.6rem;
+        height: 2.0533rem;
+        line-height: 2.0533rem;
+        text-align: center;
+        top: 50%;
+        right: .5333rem;
+        transform: translateY(-50%);
+        background-color: #0BB7F7;
+        color: white;
+        border-radius: 1.3333rem;
+        font-size: .8rem;
+      }
+    }
+    .content{
+      height: 6.6667rem;
+      margin-bottom: 1.3333rem;
+      overflow-y: auto;
+      .style{
+        height: 400px;
+        background-color: red;
       }
     }
   }

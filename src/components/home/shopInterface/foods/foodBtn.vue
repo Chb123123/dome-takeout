@@ -25,7 +25,9 @@ export default {
       Bus.$emit('addCount', [1, this.foodId])
     },
     lowerCount () {
-      Bus.$emit('addCount', [-1, this.foodId])
+      if (this.num > 0) {
+        Bus.$emit('addCount', [-1, this.foodId])
+      }
     }
   }
 }
