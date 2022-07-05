@@ -1,7 +1,7 @@
 <template>
   <div class="shopinterfaceContainer">
     <div class="shopBackground">
-      <img :src="'http://elm.cangdu.org/img/' + shop.image_path" alt="">
+      <img :src="'http://elm.cangdu.org/img/' + shop.image_path" alt="暂无图片">
       <div class="back" @click="backBtn"><van-icon name="arrow-left" /></div>
       <div class="shopAbout">
         <div class="shopImg"><img :src="'http://elm.cangdu.org/img/' + shop.image_path" alt=""></div>
@@ -12,21 +12,20 @@
         <div class="delivery">配送费优惠</div>
       </div>
     </div>
+    <div class="ificationFixed" v-show="obtainClass === false" ref="obtain">
+      <span v-for="(item, index) in stopClassification" :key="item.id" @click="targetBtn(index, $event)">{{ item.name }}</span>
+    </div>
     <div class="commoditys">
       <van-tabs v-model="active" animated>
         <van-tab title="点餐">
     <!-- <p style="margin-left: .6667rem; margin-bottom: .6667rem;">点餐</p> -->
-      <div class="Classification">
-        <span v-for="(item, index) in stopClassification" :key="item.id" @click="targetBtn(index)">{{ item.name }}</span>
+      <div class="Classification" ref="obtain" v-show="obtainClass">
+        <span v-for="(item, index) in stopClassification" :key="item.id" @click="targetBtn(index, $event)">{{ item.name }}</span>
       </div>
       <Foods :foodList="initshop"></Foods>
   </van-tab>
   <van-tab title="评论">
-    <!-- <p style="margin-left: .6667rem; margin-bottom: .6667rem;">点餐</p> -->
-      <div class="Classification">
-        <span v-for="(item, index) in stopClassification" :key="item.id" @click="targetBtn(index)">{{ item.name }}</span>
-      </div>
-      <Foods :foodList="initshop"></Foods>
+    <div class="ificationFixed">123</div>
   </van-tab>
 </van-tabs>
     </div>
@@ -41,23 +40,25 @@
       </div>
       <div v-if="sunMoney <= 15" class="money">15元起送</div>
       <div v-else class="goTosettlementMoney">去结算</div>
-    </div>
-    <van-action-sheet v-model="show" :closeable="false" title="已选商品">
-  <div class="content">
-    <div class="style"></div>
-  </div>
-</van-action-sheet>
+      </div>
+      <van-action-sheet v-model="show" :closeable="false" title="已选商品">
+      <div class="content">
+        <CheckedFood v-for="item in checkedFoods" :key="item._id" :foodsImg="item.image_path" :title="item.name" :price="item.specfoods[0].price" :count="item.__v"></CheckedFood>
+      </div>
+    </van-action-sheet>
   </div>
 </template>
 
 <script>
+import CheckedFood from '@/components/home/shopInterface/foods/checkedFoods/checkedFoods.vue'
 import Bus from '@/EventBus/EventBus'
 import { getShopInterface } from '@/api/home/shopInterface/shopInterface'
 import { mapState } from 'vuex'
 import Foods from '@/components/home/shopInterface/foods/foods.vue'
 export default {
   components: {
-    Foods
+    Foods,
+    CheckedFood
   },
   // props: {
   //   money: {
@@ -75,15 +76,34 @@ export default {
       flag: true,
       // 存储选择商品的数量
       shopCount: 0,
+      // 导航栏默认选中的index
       active: 0,
       // 是否展示下拉菜单
-      show: false
+      show: false,
+      // 存储选中的商品详情
+      checkedFoods: [],
+      // 动态的添加class
+      obtainClass: true
     }
   },
   computed: {
     ...mapState(['shop'])
   },
+  mounted () {
+    // 注册屏幕滚动事件
+    window.addEventListener('scroll', this.handleScrollx, true)
+  },
   methods: {
+    // 判断当前滚动条距离屏幕的距离
+    handleScrollx () {
+      // console.log(window.pageYOffset)
+      // console.log(this.$refs.obtain.getBoundingClientRect().top)
+      if (window.pageYOffset >= 533) {
+        this.obtainClass = false
+      } else {
+        this.obtainClass = true
+      }
+    },
     backBtn () {
       this.$router.push('/')
     },
@@ -93,7 +113,8 @@ export default {
       // console.log(res.data)
       // eslint-disable-next-line array-callback-return
       res.data.some((item, index) => {
-        if (index <= 10) {
+        if (index <= 6) {
+          console.log(item)
           this.stopClassification.push(item)
         } else {
           // console.log(item, index)
@@ -103,8 +124,8 @@ export default {
       this.initshop = this.stopClassification[0]
     },
     // 点击切换对应商品
-    targetBtn (index) {
-      console.log(index)
+    targetBtn (index, event) {
+      // event.target.style.backgroundColor = 'red'
       this.initshop = this.stopClassification[index]
     },
     showAction () {
@@ -137,6 +158,20 @@ export default {
               item.__v += val[0]
               this.sunMoney += item.specfoods[0].price
               this.shopCount++
+              // console.log(this.checkedFoods)
+              if (this.checkedFoods.length === 0) {
+                this.checkedFoods.push(item)
+              } else {
+                // eslint-disable-next-line array-callback-return
+                for (const i in this.checkedFoods) {
+                  // console.log(this.checkedFoods[i])
+                  if (this.checkedFoods[i]._id === item._id) {
+                    this.checkedFoods.splice(i, 1)
+                  }
+                }
+                // console.log(item.__v !== 0)
+                this.checkedFoods.push(item)
+              }
               return true
             }
           } else {
@@ -146,6 +181,15 @@ export default {
                 this.sunMoney -= item.specfoods[0].price
                 // this.flag = true
                 this.shopCount--
+                for (const i in this.checkedFoods) {
+                  // console.log(this.checkedFoods[i])
+                  if (this.checkedFoods[i]._id === item._id) {
+                    this.checkedFoods.splice(i, 1)
+                  }
+                }
+                if (item.__v !== 0) {
+                  this.checkedFoods.push(item)
+                }
               }
               return true
             }
@@ -153,7 +197,7 @@ export default {
         })
       }
     })
-    console.log(this.shopCount)
+    // this.checkedFoods = new Set(this.checkedFoods)
     this.flag = true
   }
 }
@@ -243,12 +287,14 @@ export default {
           border-radius: .2667rem;
           line-height: 1.2rem;
           text-align: center;
-          margin-bottom: .4rem;
+          margin-top: .4rem;
+          margin-bottom: .5333rem;
           font-size: .6933rem;
         }
         .delivery{
           // height: 35px;
-          display: inline-block;
+          // display: block;
+          float: left;
           border: .0267rem solid #D77269;
           padding: .16rem .2667rem;
           color: #D77269;
@@ -259,14 +305,20 @@ export default {
       }
     }
     .commoditys{
+      position: relative;
       margin-top: 5.0667rem;
       // padding: 0 25px;
       overflow: hidden;
+      // background-color: red;
       .Classification{
-        float: left;
+        position: absolute;
+        left: 0;
+        top: 0;
+        // float: left;
         width: 3.7333rem;
         display: flex;
         // height: 100px;
+        margin-top: .5333rem;
         flex-direction: column;
         background-color: #F2F2F2;
         > span{
@@ -363,13 +415,29 @@ export default {
       }
     }
     .content{
-      height: 6.6667rem;
-      margin-bottom: 1.3333rem;
+      height: 6.1333rem;
+      margin-bottom: 1.4667rem;
       overflow-y: auto;
-      .style{
-        height: 400px;
-        background-color: red;
-      }
+      padding-bottom: 1.0667rem;
     }
+    .ificationFixed{
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 3.7333rem;
+        // height: 200px;
+        display: flex;
+        // height: 100px;
+        // margin-top: .5333rem;
+        z-index: 10;
+        flex-direction: column;
+        background-color: #F2F2F2;
+        > span{
+          padding: .8rem .6667rem;
+          text-align: center;
+          color: #636363;
+          font-size: .64rem;
+        }
+      }
   }
 </style>

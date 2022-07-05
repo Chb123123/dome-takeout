@@ -10,7 +10,7 @@
       </div>
       <div class="foodAbout">
         <div class="foodname">{{ item.specfoods[0].name }}</div>
-        <div class="foodtitle">123</div>
+        <div class="foodtitle">评分{{ item.specfoods[0].recent_rating }}</div>
         <div class="sellNum">{{ item.tips }}</div>
         <div class="money">{{item.specfoods[0].price}}￥</div>
         <BtnCount :num="item.__v" :foodId="item._id"></BtnCount>
@@ -44,6 +44,7 @@ export default {
     width: 15.7333rem;
     // height: 200px;
     float: left;
+    margin-left: 3.8667rem;
     // border: .0267rem solid red;
     overflow-X: auto;
     overflow-Y: auto;
