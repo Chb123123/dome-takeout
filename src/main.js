@@ -9,6 +9,7 @@ import '@/utils/flexible'
 import '@/utils/style.less'
 
 Vue.use(Vant)
+// Vue.use(Dialog)
 Vue.config.productionTip = false
 
 new Vue({

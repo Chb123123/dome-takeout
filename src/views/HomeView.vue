@@ -7,7 +7,7 @@
       <div class="Private-letter"><van-icon name="comment-o" /></div>
     </div>
     <!-- 搜索模块 -->
-    <div class="submitBox">
+    <div class="submitBox" @click="gotoSubmitCom">
       <div class="submit">
         <div class="submitBtn">搜索</div>
         <div class="photograph"><van-icon name="photograph" /></div>
@@ -75,6 +75,10 @@ export default {
   },
   methods: {
     ...mapMutations(['newAddress']),
+    // 前往搜索组件
+    gotoSubmitCom () {
+      this.$router.push('/submit')
+    },
     async getTakeawayAbout () {
       // console.log(this.addressDetails.latitude, this.num)
       // console.log(this.$store.state.addressDetails.longitude)

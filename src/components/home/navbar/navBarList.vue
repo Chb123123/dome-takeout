@@ -6,7 +6,7 @@
       <span class="navtitle">{{ item.title }}</span>
     </div>
   </div> -->
-  <van-swipe class="my-swipe" indicator-color="white">
+  <van-swipe class="my-swipe" indicator-color="#0BB7F7">
   <van-swipe-item  v-for="i in navList" :key="i.id">
     <div class="navbarContainer">
     <div class="nav" v-for="item in i" :key="item.id" @click="getNavId(item.id)">

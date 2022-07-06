@@ -12,7 +12,9 @@ export default new Vuex.Store({
     shop: null,
     // 将添加的商品存放到此处
     shoppingCart: [],
-    flag: true
+    flag: true,
+    // 搜索店铺的历史记录
+    historySubmit: []
   },
   getters: {
   },
@@ -43,6 +45,14 @@ export default new Vuex.Store({
         state.shoppingCart.push(object)
       }
       state.flag = true
+    },
+    // 将搜索的历史记录保存到historySubmit
+    gethistorySubmit (state, keyword) {
+      state.historySubmit.push(keyword)
+    },
+    // 触发事件，清空历史记录
+    clearhistorySubmit (state) {
+      state.historySubmit = []
     }
   },
   actions: {
