@@ -12,20 +12,22 @@
         <div class="delivery">配送费优惠</div>
       </div>
     </div>
-    <div class="ificationFixed" v-show="obtainClass === false" ref="obtain">
-      <span v-for="(item, index) in stopClassification" :key="item.id" @click="targetBtn(index, $event)">{{ item.name }}</span>
+    <div class="ificationFixed" v-show="obtainClass === false" v-if="showNav">
+      <span v-for="(item, index) in stopClassification" :key="item.id" @click="targetBtn(index, $event)" :class="item.spanStyle">{{ item.name }}</span>
     </div>
-    <div class="commoditys">
-      <van-tabs v-model="active" animated>
+    <div class="commoditys"  ref="obtain">
+      <van-tabs v-model="active" animated @click="onClick">
         <van-tab title="点餐">
     <!-- <p style="margin-left: .6667rem; margin-bottom: .6667rem;">点餐</p> -->
-      <div class="Classification" ref="obtain" v-show="obtainClass">
-        <span v-for="(item, index) in stopClassification" :key="item.id" @click="targetBtn(index, $event)">{{ item.name }}</span>
+      <div class="Classification" v-show="obtainClass">
+        <span v-for="(item, index) in stopClassification" :key="item.id" @click="targetBtn(index, $event)" :class="item.spanStyle">{{ item.name }}</span>
       </div>
       <Foods :foodList="initshop"></Foods>
   </van-tab>
   <van-tab title="评论">
-    <div class="ificationFixed">123</div>
+    <div class="commentBox">
+      <ShopCommemt v-for="item in shoppingComment" :key="item._id" :count="item.rating_star" :username="item.username" :userrelease="item.rated_at" :shopList="item.item_ratings" :userEvaluation="item.rating_text"></ShopCommemt>
+    </div>
   </van-tab>
 </van-tabs>
     </div>
@@ -50,6 +52,10 @@
 </template>
 
 <script>
+// 获取商品评论数据
+import { getShopComment } from '@/api/home/shopInterface/shopComment/shopCommetnAPI'
+// 商品评论模块
+import ShopCommemt from '@/components/home/shopInterface/foodComment/foodComment.vue'
 import CheckedFood from '@/components/home/shopInterface/foods/checkedFoods/checkedFoods.vue'
 import Bus from '@/EventBus/EventBus'
 import { getShopInterface } from '@/api/home/shopInterface/shopInterface'
@@ -58,7 +64,8 @@ import Foods from '@/components/home/shopInterface/foods/foods.vue'
 export default {
   components: {
     Foods,
-    CheckedFood
+    CheckedFood,
+    ShopCommemt
   },
   // props: {
   //   money: {
@@ -83,7 +90,12 @@ export default {
       // 存储选中的商品详情
       checkedFoods: [],
       // 动态的添加class
-      obtainClass: true
+      obtainClass: true,
+      // 切换到评论，隐藏侧边导航栏
+      showNav: true,
+      shoppingComment: [],
+      obtainTop: 533,
+      obtainState: true
     }
   },
   computed: {
@@ -98,10 +110,18 @@ export default {
     handleScrollx () {
       // console.log(window.pageYOffset)
       // console.log(this.$refs.obtain.getBoundingClientRect().top)
-      if (window.pageYOffset >= 533) {
+      if (window.pageYOffset >= this.obtainTop) {
         this.obtainClass = false
       } else {
         this.obtainClass = true
+      }
+    },
+    onClick (name, title) {
+      console.log(name, title)
+      if (name === 0) {
+        this.showNav = true
+      } else {
+        this.showNav = false
       }
     },
     backBtn () {
@@ -114,7 +134,7 @@ export default {
       // eslint-disable-next-line array-callback-return
       res.data.some((item, index) => {
         if (index <= 6) {
-          console.log(item)
+          // console.log(item)
           this.stopClassification.push(item)
         } else {
           // console.log(item, index)
@@ -122,18 +142,31 @@ export default {
         }
       })
       this.initshop = this.stopClassification[0]
+      this.stopClassification[0].spanStyle = 'spanStyle'
     },
     // 点击切换对应商品
     targetBtn (index, event) {
-      // event.target.style.backgroundColor = 'red'
       this.initshop = this.stopClassification[index]
+      // eslint-disable-next-line array-callback-return
+      this.stopClassification.some((item) => {
+        item.spanStyle = ''
+      })
+      this.stopClassification[index].spanStyle = 'spanStyle'
     },
     showAction () {
       this.show = true
+    },
+    // 获取店铺评论
+    async getShoppingComment () {
+      // console.log(this.shop.id)
+      const res = await getShopComment(this.shop.id)
+      // console.log(res.data)
+      this.shoppingComment = res.data
     }
   },
   created () {
     this.getShopInterfaceList()
+    this.getShoppingComment()
   },
   updated () {
     // console.log('11')
@@ -198,6 +231,12 @@ export default {
       }
     })
     // this.checkedFoods = new Set(this.checkedFoods)
+    // console.log(this.$refs.obtain.getBoundingClientRect().top)
+    if (this.obtainState) {
+      this.obtainTop = this.$refs.obtain.getBoundingClientRect().top
+      this.obtainState = false
+    }
+    // this.obtainTop = this.$refs.obtain.getBoundingClientRect().top
     this.flag = true
   }
 }
@@ -327,6 +366,14 @@ export default {
           color: #636363;
           font-size: .64rem;
         }
+        .spanStyle{
+          background-color: white;
+          color: #000;
+        }
+      }
+      .commentBox{
+        padding-top: .5333rem;
+        background-color: #F6F6F6;
       }
     }
     .settlement{
@@ -437,6 +484,10 @@ export default {
           text-align: center;
           color: #636363;
           font-size: .64rem;
+        }
+        .spanStyle{
+          background-color: white;
+          color: #000;
         }
       }
   }
