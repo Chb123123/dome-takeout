@@ -1,7 +1,14 @@
 <template>
   <div class="cartViweContainer">
     <div class="cartViweHead">全部</div>
-    <Order v-for="item in orderList" :key="item._id" :shoppingname="item.restaurant_name" :shoppingImg="item.restaurant_image_url" :orderState="item.status_bar.title" :shop="item.basket.group[0][0].name"></Order>
+    <van-list
+  v-model="loading"
+  :finished="finished"
+  finished-text="没有更多了"
+  @load="onLoad"
+>
+  <Order v-for="item in orderList" :key="item._id" :shoppingname="item.restaurant_name" :shoppingImg="item.restaurant_image_url" :orderState="item.status_bar.title" :shop="item.basket.group[0][0].name" :deliveryTime="item.formatted_created_at" :TradingInformation="item.status_bar.title" :shopPrice="item.basket.group[0][0].price" :quantity="item.basket.group[0][0].quantity"></Order>
+</van-list>
     <Tabbar></Tabbar>
   </div>
 </template>
@@ -19,14 +26,28 @@ export default {
   },
   data () {
     return {
-      orderList: []
+      orderList: [],
+      // 是否加载
+      loading: true,
+      // 数据是否加载完成
+      finished: false,
+      // 设置请求数据跳过的数量
+      num: 0
     }
   },
   methods: {
+    async onLoad () {
+      this.num += 20
+      const res = await getOrderList(20, this.num)
+      // console.log(res.data)
+      this.orderList = [...this.orderList, ...res.data]
+      this.loading = false
+    },
     async getOrderLiet () {
       const res = await getOrderList(20, 0)
-      console.log(res.data)
+      // console.log(res.data)
       this.orderList = res.data
+      this.loading = false
     }
   },
   created () {

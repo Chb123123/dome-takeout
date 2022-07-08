@@ -12,10 +12,13 @@
         <div class="delivery">配送费优惠</div>
       </div>
     </div>
+    <div class="loading" v-if="showloading">
+      <van-loading type="spinner" color="#1989fa" size="1.17rem"/>
+    </div>
     <div class="ificationFixed" v-show="obtainClass === false" v-if="showNav">
       <span v-for="(item, index) in stopClassification" :key="item.id" @click="targetBtn(index, $event)" :class="item.spanStyle">{{ item.name }}</span>
     </div>
-    <div class="commoditys"  ref="obtain">
+    <div class="commoditys"  ref="obtain" v-if="showloading === false">
       <van-tabs v-model="active" animated @click="onClick">
         <van-tab title="点餐">
     <!-- <p style="margin-left: .6667rem; margin-bottom: .6667rem;">点餐</p> -->
@@ -95,7 +98,9 @@ export default {
       showNav: true,
       shoppingComment: [],
       obtainTop: 533,
-      obtainState: true
+      obtainState: true,
+      // 是否显示加载图标
+      showloading: true
     }
   },
   computed: {
@@ -117,7 +122,7 @@ export default {
       }
     },
     onClick (name, title) {
-      console.log(name, title)
+      // console.log(name, title)
       if (name === 0) {
         this.showNav = true
       } else {
@@ -142,6 +147,7 @@ export default {
         }
       })
       this.initshop = this.stopClassification[0]
+      this.showloading = false
       this.stopClassification[0].spanStyle = 'spanStyle'
     },
     // 点击切换对应商品
@@ -489,6 +495,14 @@ export default {
           background-color: white;
           color: #000;
         }
+      }
+      // 加载图标
+      .loading{
+        margin: 5.3333rem auto 0;
+        // font-size: 60px;
+        // background-color: red;
+        height: 1.3333rem;
+        width: 1.3333rem;
       }
   }
 </style>

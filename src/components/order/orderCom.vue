@@ -1,13 +1,14 @@
 <template>
   <div class="orderContainer">
+    <!-- <van-loading color="#1989fa" /> -->
     <div class="shopping">
       <div class="shoppingImg">
         <img :src="'https://elm.cangdu.org/img/'+shoppingImg" alt="">
       </div>
       <div class="shoppingname">{{ shoppingname }}</div>
-      <div class="Orderstate">订单超时</div>
+      <div class="Orderstate">交易失败</div>
     </div>
-    <div class="deliveryState">超出配送范围</div>
+    <div class="deliveryState">{{ TradingInformation }}</div>
     <div class="deliveryTime">{{ deliveryTime }}</div>
     <div class="shop">
       <div class="firstShopImg">
@@ -17,8 +18,8 @@
         {{ shop }}
       </div>
       <div class="price">
-        <div class="shopPrice"><span class="priceStyle">&yen;</span>&nbsp;10</div>
-        <div class="shopCount">共2件</div>
+        <div class="shopPrice"><span class="priceStyle">&yen;</span>&nbsp;{{ price }}</div>
+        <div class="shopCount">共{{ quantity }}件</div>
       </div>
     </div>
   </div>
@@ -36,7 +37,21 @@ export default {
     // 订单状态
     orderState: {},
     // 商品
-    shop: {}
+    shop: {},
+    // 交易信息
+    TradingInformation: {},
+    // 商品价格
+    shopPrice: {},
+    // 商品数量
+    quantity: {}
+  },
+  data () {
+    return {
+      price: 0
+    }
+  },
+  created () {
+    this.price = this.shopPrice * this.quantity
   }
 }
 </script>
