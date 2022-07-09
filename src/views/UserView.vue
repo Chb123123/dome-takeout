@@ -1,45 +1,82 @@
 <template>
   <div class="userAboutContainer">
     <div class="userintroduce">
-      <div class="useravatar"></div>
-      <div class="username">123</div>
+      <div class="useravatar">未登录</div>
+      <div class="username">sd846728346238</div>
     </div>
     <!-- 用户资产 -->
     <div class="userassets">
       <div class="myassets">我的资产</div>
       <div class="voucher">
-        <div class="RedEnvelope">
+        <div class="RedEnvelope" @click="gotoRedEnvelope">
           <div class="RedEnvelopeTop"><span style="color: #F74E44;"><van-icon name="coupon" /></span> 红包/神券</div>
           <div class="RedEnvelopeBottom"><span>10</span>个未使用</div>
         </div>
-        <div class="RedEnvelope">
+        <div class="RedEnvelope" @click="show">
           <div class="RedEnvelopeTop"><span style="color:#FEA238;"><van-icon name="gold-coin" /></span> 代金券</div>
           <div class="RedEnvelopeBottom"><span>0</span>张未使用</div>
         </div>
-        <div class="RedEnvelope">
+        <div class="RedEnvelope" @click="show">
           <div class="RedEnvelopeTop"><span style="color: #FB7A3C;"><van-icon name="send-gift" /></span> 立减金</div>
           <div class="RedEnvelopeBottom">暂无</div>
         </div>
       </div>
     </div>
-    <div class="collect">
+    <div class="collect" @click="show">
       <div class="collectTitle">我的收藏</div>
       <div class="collectintroduce">暂无收藏,添加收藏更快找到你的菜~</div>
     </div>
-    <div class="userwallet">
+    <div class="userwallet"  @click="show">
       <div class="myWallet">我的钱包</div>
-      <div class="myPrice">0.00</div>
+      <div class="myPrice">
+        <div class="price">
+          <div class="priceNum">5000<span style="font-size: 0.565rem; margin-left: 0.266rem;">元</span></div>
+          <div class="borrowMoney">美团借钱</div>
+          <div class="AboutMoney">大约可借</div>
+        </div>
+        <div class="price">
+          <div class="priceNum">1<span style="font-size: 0.565rem; margin-left: 0.266rem;">次</span></div>
+          <div class="borrowMoney">霸王餐</div>
+          <div class="AboutMoney">近期申卡奖励</div>
+        </div>
+        <div class="price">
+          <div class="priceNum">1<span style="font-size: 0.565rem; margin-left: 0.266rem;">张</span></div>
+          <div class="borrowMoney">外卖神券</div>
+          <div class="AboutMoney">今日可领</div>
+        </div>
+        <div class="price">
+          <div class="priceNum">9.58<span style="font-size: 0.565rem; margin-left: 0.266rem;">元</span></div>
+          <div class="borrowMoney">我的账单</div>
+          <div class="AboutMoney">最近支付</div>
+        </div>
+      </div>
     </div>
     <Tabbar></Tabbar>
   </div>
 </template>
 
 <script>
+import { Notify } from 'vant'
 // 导航栏组件
 import Tabbar from '../utils/tabbar.vue'
 export default {
   components: {
-    Tabbar
+    Tabbar,
+    [Notify.Component.name]: Notify.Component
+  },
+  methods: {
+    show () {
+      Notify({
+        background: '#1989FA',
+        message: '暂无功能',
+        duration: 1000
+      })
+    },
+    // 点击红包模块，前往红包模块
+    gotoRedEnvelope () {
+      console.log('11')
+      this.$router.push('/redEnvelope')
+    }
   }
 }
 </script>
@@ -61,9 +98,15 @@ export default {
       .useravatar{
         width: 2.6667rem;
         height: 2.6667rem;
-        background-color: red;
+        line-height: 2.6667rem;
+        // background-color: red;
         margin-right: .5333rem;
         border-radius: 50%;
+        font-size: .64rem;
+        text-align: center;
+        background-color: white;
+        color: #666;
+        border: .0533rem solid white;
       }
       .username{
         flex: 1;
@@ -154,10 +197,44 @@ export default {
         margin-bottom: 1.4667rem;
       }
       .myPrice{
-        padding-left: .6667rem;
-        height: .8533rem;
-        line-height: .8533rem;
+        display: flex;
+        // padding-left: .6667rem;
+        height: 3.0667rem;
+        // line-height: .8533rem;
         font-size: .8533rem;
+        // background-color: red;
+        .price{
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          // background-color: blue;
+          // border: 1px solid red;
+          text-align: center;
+          .priceNum{
+            height: .8rem;
+            line-height: .8rem;
+            font-size: .96rem;
+            // font-size: 600;
+            vertical-align: middle;
+            // background-color: red;
+          }
+          .borrowMoney{
+            height: .64rem;
+            line-height: .64rem;
+            font-size: .64rem;
+            color: #0D0D0D;
+          }
+          .AboutMoney{
+            height: .5867rem;
+            font-size: .5867rem;
+            line-height: .5867rem;
+            color: #B0B0B0;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+          }
+        }
       }
     }
   }
