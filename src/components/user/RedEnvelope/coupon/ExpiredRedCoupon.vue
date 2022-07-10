@@ -2,7 +2,7 @@
   <div class="componContainer">
     <div class="redcomponName">
       <span><van-icon name="fire" /></span>
-      {{RedConponName}}
+      {{ RedConponName }}
     </div>
     <div class="redComponBox">
       <div class="redComponintroduce">
@@ -18,7 +18,7 @@
         <div class="inforTitle">
           {{ limited }}
         </div>
-        <div class="goToUse" @click="gotoHome">去使用</div>
+        <!-- <div class="goToUse" @click="gotoHome">去使用</div> -->
       </div>
     </div>
   </div>
@@ -27,9 +27,9 @@
 <script>
 export default {
   props: {
-    phone: {},
     // 红包类型
     RedConponName: {},
+    phone: {},
     // 红包可用期限
     availableRedComponTime: {},
     // 红包金额
@@ -59,6 +59,23 @@ export default {
     border-radius: .8rem;
     margin-top: .2667rem;
     overflow: hidden;
+    opacity: 0.5;
+    &::after{
+      content: '已失效';
+      position: absolute;
+      font-size: .8533rem;
+      line-height: 3.2rem;
+      text-align: center;
+      color: #D4BF92;
+      width: 3.2rem;
+      height: 3.2rem;
+      bottom: -0.16rem;
+      right: -0.2667rem;
+      border: .1333rem solid #D4BF92;
+      border-radius: 50%;
+      transform: rotateZ(-35deg);
+      // background-color: rgba(0,0,0,0.4);
+    }
     .redcomponName{
       position: absolute;
       top: 0;

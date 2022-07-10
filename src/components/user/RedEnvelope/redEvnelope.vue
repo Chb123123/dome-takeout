@@ -1,24 +1,52 @@
 <template>
   <div class="redEvnelopeContainer">
-    <div class="head"><span class="back" @click="back"><van-icon name="arrow-left" /></span>可用红包</div>
-    <RedConpon></RedConpon>
-    <RedConpon></RedConpon>
-    <RedConpon></RedConpon>
-    <RedConpon></RedConpon>
+    <div class="head"><span class="back" @click="back"><van-icon name="arrow-left" /></span>获得红包</div>
+    <RedConpon v-for="item in availableRedComponList" :key="item.id" :availableRedComponTime="item.end_date" :availPrice="item.amount" :online_paid_only="item.description_map.online_paid_only" :limited="item.description_map.phone" :RedConponName="item.name" :sum_condition="item.description_map.sum_condition"></RedConpon>
+    <!-- 过期红包模块 -->
+    <ExpiredRedCoupon v-for="item in expiredRedCoupon" :key="item.id" :availableRedComponTime="item.end_date" :availPrice="item.amount" :online_paid_only="item.description_map.online_paid_only" :limited="item.description_map.phone" :RedConponName="item.name" :sum_condition="item.description_map.sum_condition"></ExpiredRedCoupon>
   </div>
 </template>
 
 <script>
+// 获取过期红包
+import { getExpiredRedCompon } from '@/api/user/RedCompon/ExpiredRedConpon'
+import { getAvailableRedCompon } from '@/api/user/RedCompon/availableRedCompon'
 // 导入红包组件
 import RedConpon from './coupon/redCoupon.vue'
+import ExpiredRedCoupon from './coupon/ExpiredRedCoupon.vue'
 export default {
   components: {
-    RedConpon
+    RedConpon,
+    ExpiredRedCoupon
+  },
+  data () {
+    return {
+      availableRedComponList: [],
+      expiredRedCoupon: [],
+      value1: 0,
+      value2: 'a',
+      option1: [
+        { text: '可用红包', value: 0 },
+        { text: '过期红包', value: 1 }
+      ]
+    }
   },
   methods: {
     back () {
       this.$router.back(-1)
+    },
+    // 获取可用红包列表
+    async redConpon () {
+      const res = await getAvailableRedCompon()
+      this.availableRedComponList = res.data
+      // console.log(res.data)
+      const res1 = await getExpiredRedCompon()
+      this.expiredRedCoupon = res1.data
+      // console.log(res1.data)
     }
+  },
+  created () {
+    this.redConpon()
   }
 }
 </script>
@@ -27,8 +55,8 @@ export default {
   .redEvnelopeContainer{
     max-width: 20rem;
     margin: auto;
-    height: 100vh;
-    background-color: #EEEEEE;
+    // height: 100vh;
+    background-color: rgb(248,248,248);
     padding-top: 2.6667rem;
     .head{
       position: relative;
@@ -42,6 +70,7 @@ export default {
       left: 50%;
       font-size: .8533rem;
       transform: translateX(-50%);
+      z-index: 999;
       .back{
         position: absolute;
         left: .5333rem;

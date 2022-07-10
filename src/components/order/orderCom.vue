@@ -74,10 +74,11 @@ export default {
         width: 1.3333rem;
         // background-color: red;
         border-radius: .2667rem;
+        overflow: hidden;
         > img {
           width: 100%;
           height: 100%;
-          border-radius: .2667rem;
+          // border-radius: .2667rem;
         }
       }
       .shoppingname{

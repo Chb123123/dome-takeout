@@ -1,7 +1,7 @@
 <template>
   <div class="userAboutContainer">
     <div class="userintroduce">
-      <div class="useravatar">未登录</div>
+      <div class="useravatar" @click="gotoLogin">未登录</div>
       <div class="username">sd846728346238</div>
     </div>
     <!-- 用户资产 -->
@@ -65,6 +65,9 @@ export default {
     [Notify.Component.name]: Notify.Component
   },
   methods: {
+    gotoLogin () {
+      this.$router.push('/login')
+    },
     show () {
       Notify({
         background: '#1989FA',
