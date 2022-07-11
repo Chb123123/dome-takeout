@@ -1,8 +1,10 @@
 <template>
   <div class="userAboutContainer">
     <div class="userintroduce">
-      <div class="useravatar" @click="gotoLogin">未登录</div>
-      <div class="username">sd846728346238</div>
+      <div v-if="userAbout" class="useravatar" @click="successLogin">已登录</div>
+      <div v-else class="useravatar" @click="gotoLogin">未登录</div>
+      <div v-if="userAbout" class="username">{{ userAbout.username }}</div>
+      <div v-else class="username">sd846728346238</div>
     </div>
     <!-- 用户资产 -->
     <div class="userassets">
@@ -10,7 +12,7 @@
       <div class="voucher">
         <div class="RedEnvelope" @click="gotoRedEnvelope">
           <div class="RedEnvelopeTop"><span style="color: #F74E44;"><van-icon name="coupon" /></span> 红包/神券</div>
-          <div class="RedEnvelopeBottom"><span>10</span>个未使用</div>
+          <div class="RedEnvelopeBottom"><span>3</span>个未使用</div>
         </div>
         <div class="RedEnvelope" @click="show">
           <div class="RedEnvelopeTop"><span style="color:#FEA238;"><van-icon name="gold-coin" /></span> 代金券</div>
@@ -56,7 +58,8 @@
 </template>
 
 <script>
-import { Notify } from 'vant'
+import { mapState } from 'vuex'
+import { Notify, Dialog, Toast } from 'vant'
 // 导航栏组件
 import Tabbar from '../utils/tabbar.vue'
 export default {
@@ -64,7 +67,13 @@ export default {
     Tabbar,
     [Notify.Component.name]: Notify.Component
   },
+  computed: {
+    ...mapState(['userAbout'])
+  },
   methods: {
+    successLogin () {
+      Toast.success('已登录')
+    },
     gotoLogin () {
       this.$router.push('/login')
     },
@@ -77,8 +86,22 @@ export default {
     },
     // 点击红包模块，前往红包模块
     gotoRedEnvelope () {
-      console.log('11')
-      this.$router.push('/redEnvelope')
+      if (this.userAbout) {
+        this.$router.push('/redEnvelope')
+      } else {
+        Dialog.confirm({
+          // title: '标题',
+          message: '账号未登入'
+        })
+          .then(() => {
+            // on confirm
+            this.$router.push('/login')
+          })
+          .catch(() => {
+            // on cancel
+          })
+        // Dialog({ message: '提示' })
+      }
     }
   }
 }

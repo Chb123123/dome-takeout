@@ -7,7 +7,7 @@
         <div class="shopImg"><img :src="'http://elm.cangdu.org/img/' + shop.image_path" alt=""></div>
         <div class="shoptitle">{{ shop.name }}</div>
         <div class="shopscore"><span class="shopscorestyle">{{ shop.rating }}分</span><span style="margin-right: .2667rem;">商家配送时间为{{shop.order_lead_time}}</span><span>月售{{shop.rating_count}}</span></div>
-        <div class="coupon"><van-icon name="star" style="font-size: .64rem;margin-right: .2667rem;"/>￥4无门槛</div>
+        <div class="coupon" @click="aaa"><van-icon name="star" style="font-size: .64rem;margin-right: .2667rem;"/>￥4无门槛</div>
         <div class="delivery">{{ shop.delivery_mode.text }}</div>
         <div class="delivery">配送费优惠</div>
       </div>
@@ -44,7 +44,7 @@
         <span class="delivery-fee">预计配送费5￥</span>
       </div>
       <div v-if="sunMoney <= 15" class="money">15元起送</div>
-      <div v-else class="goTosettlementMoney">去结算</div>
+      <div v-else class="goTosettlementMoney" @click="gotoSettlement">去结算</div>
       </div>
       <van-action-sheet v-model="show" :closeable="false" title="已选商品">
       <div class="content">
@@ -55,6 +55,7 @@
 </template>
 
 <script>
+import { Toast } from 'vant'
 // 获取商品评论数据
 import { getShopComment } from '@/api/home/shopInterface/shopComment/shopCommetnAPI'
 // 商品评论模块
@@ -111,6 +112,9 @@ export default {
     window.addEventListener('scroll', this.handleScrollx, true)
   },
   methods: {
+    aaa () {
+      Toast.fail('无法领取')
+    },
     // 判断当前滚动条距离屏幕的距离
     handleScrollx () {
       // console.log(window.pageYOffset)
@@ -168,6 +172,10 @@ export default {
       const res = await getShopComment(this.shop.id)
       // console.log(res.data)
       this.shoppingComment = res.data
+    },
+    // 点击去结算，前往结算界面
+    gotoSettlement () {
+      this.$router.push('/settlement')
     }
   },
   created () {

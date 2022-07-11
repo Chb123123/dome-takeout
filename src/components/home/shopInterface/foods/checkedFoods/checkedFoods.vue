@@ -79,11 +79,11 @@ export default {
         height: .5333rem;
         line-height: .5333rem;
         padding: .0533rem .1333rem;
-        background-color: #0BB7F7;
+        // background-color: #0BB7F7;
         box-sizing: content-box;
         text-align: center;
         font-size: .5333rem;
-        color: white;
+        color: #000;
         // background-color: red;
       }
     }

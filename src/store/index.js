@@ -5,6 +5,8 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    // 用户信息
+    userAbout: null,
     addressDetails: {},
     // 详细地址
     detailedAddress: null,
@@ -19,6 +21,9 @@ export default new Vuex.Store({
   getters: {
   },
   mutations: {
+    getUserAbout (state, object) {
+      state.userAbout = object
+    },
     newAddress (state, object) {
       state.addressDetails = object
     },
