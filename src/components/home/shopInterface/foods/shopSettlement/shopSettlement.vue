@@ -4,18 +4,67 @@
       确认订单
       <div class="back" @click="backShop"><van-icon name="arrow-left" /></div>
     </div>
-    <div class="userAddress">123</div>
-    <div class="userPhone">123</div>
-    <div class="shopAbout"></div>
-    <div class="settlementMoney"></div>
+    <div class="userAddress">
+      <div class="Address">小康超市</div>
+      <div class="userAbout">蔡怀彬</div>
+      <div class="delivey">立即送出
+        <div class="deliveyTime">预计9:00送到</div>
+      </div>
+      <div class="fayWay">支付方式
+        <div class="fay">余额</div>
+      </div>
+    </div>
+    <div class="userPhone">
+      <div class="Phone">用户手机号
+        <span>123455666765</span>
+      </div>
+      <div class="encryption">供商家、骑士使用（默认加密）</div>
+    </div>
+    <div class="shopAbout">
+      <div class="shoppingName">奶茶</div>
+      <BuyShop></BuyShop>
+      <div class="delivery"><div class="icon">￥</div>打包费
+        <div class="UitpriceStyle"><span>￥</span>0</div>
+      </div>
+      <div class="delivery"><div class="icon">￥</div>配送费
+        <div class="UitpriceStyle"><span>￥</span>5</div>
+      </div>
+      <div class="delivery"><div class="icon"><van-icon name="coupon" /></div>使用红包
+        <!-- <div class="UitpriceStyle"><span>￥</span>5</div> -->
+        <div class="useRedConpon">未使用红包<van-icon name="arrow" /></div>
+      </div>
+    </div>
+    <div class="settlementMoney">
+      <div class="SunMoney">
+        <div class="price">合计 ￥<span class="priceStyle">20</span></div>
+        <div class="discount">优惠10元</div>
+      </div>
+      <div v-if="showSettlement" class="settlement" @click="settlement">提交订单</div>
+      <div v-else class="settlement" @click="settlement"><van-loading size="0.75rem" color="white">提交订单...</van-loading></div>
+    </div>
   </div>
 </template>
 
 <script>
+import BuyShop from './buyShop.vue'
 export default {
+  components: {
+    BuyShop
+  },
+  data () {
+    return {
+      showSettlement: true
+    }
+  },
   methods: {
     backShop () {
       this.$router.back(-1)
+    },
+    settlement () {
+      this.showSettlement = false
+      setTimeout(() => {
+        this.showSettlement = true
+      }, 2000)
     }
   }
 }
@@ -50,29 +99,187 @@ export default {
       margin: 0 auto .2667rem;
       background-color: white;
       border-radius: .5333rem;
+      padding-top: 1.2rem;
+      .Address{
+        height: .9067rem;
+        line-height: .9067rem;
+        font-size: .9067rem;
+        padding-left: .6667rem;
+        margin-bottom: .5333rem;
+      }
+      .userAbout{
+        height: .6933rem;
+        line-height: .6933rem;
+        font-size: .6933rem;
+        padding-left: .6667rem;
+        color: #909090;
+        margin-bottom: 1.2rem;
+      }
+      .delivey{
+        position: relative;
+        padding: 0 .64rem;
+        line-height: .64rem;
+        font-size: .64rem;
+        margin-bottom: 1.2rem;
+        .deliveyTime{
+          position: absolute;
+          right: .6667rem;
+          top: 50%;
+          transform: translateY(-50%);
+          color: #3DB6E1;
+        }
+      }
+      .fayWay{
+        position: relative;
+        padding: 0 .64rem;
+        line-height: .64rem;
+        font-size: .64rem;
+        .fay{
+          position: absolute;
+          right: .6667rem;
+          top: 50%;
+          transform: translateY(-50%);
+          color: #3DB6E1;
+        }
+      }
     }
     .userPhone{
+      display: flex;
+      flex-direction: column;
+      // align-content: center;
+      justify-content: center;
+      flex-direction: center;
       height: 3.8667rem;
       background-color: white;
       width: 18.8rem;
       margin:0 auto .2667rem;
       border-radius: .5333rem;
+      padding: 0 .6667rem;
+      .Phone{
+        position: relative;
+        height: .64rem;
+        line-height: .64rem;
+        font-size: .64rem;
+        margin-bottom: .5333rem;
+        > span{
+          position: absolute;
+          right: 0;
+          color: #3DB6E1;
+        }
+      }
+      .encryption{
+        line-height: .64rem;
+        height: .64rem;
+        font-size: .64rem;
+        color: #777;
+      }
     }
     .shopAbout{
+      padding: .9333rem .6667rem;
       width: 18.8rem;
       background-color: white;
       margin: auto;
-      height: 200px;
+      // height: 200px;
       border-radius: .5333rem;
+      .shoppingName{
+        height: .7467rem;
+        line-height: .7467rem;
+        font-size: .7467rem;
+        color: #929292;
+        margin-bottom: .8rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .delivery{
+        position: relative;
+        height: .8rem;
+        font-size: .8rem;
+        line-height: .8rem;
+        margin-top: .8rem;
+        .useRedConpon{
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          right: 0;
+          font-size: .64rem;
+          color: #777;
+          // line-height: ;
+        }
+      }
     }
     .settlementMoney{
       position: fixed;
+      display: flex;
+      align-items: center;
       bottom: 0;
-      left: 0;
+      left: 50%;
+      transform: translateX(-50%);
       width: 20rem;
       background-color: white;
       height: 2.5333rem;
-      box-shadow: 0 0 .2667rem rgba(0,0,0,.3);
+      box-shadow: 0 0 .2667rem rgba(0,0,0,.2);
+      .SunMoney{
+        display: flex;
+        flex-direction: column;
+        // align-items: center;
+        justify-content: center;
+        width: 13.7333rem;
+        height: 2.5333rem;
+        padding-right: .5333rem;
+        // background-color: red;
+        .price{
+          height: .96rem;
+          line-height: .96rem;
+          text-align: right;
+          font-size: .64rem;
+          color: #444;
+          margin-bottom: .2667rem;
+          .priceStyle{
+            font-size: .96rem;
+            font-weight: 600;
+            color: #111;
+          }
+        }
+        .discount{
+          text-align: right;
+          height: .64rem;
+          line-height: .64rem;
+          font-size: .64rem;
+          color: #EE502E;
+        }
+      }
+      .settlement{
+        height: 2.0533rem;
+        width: 5.7333rem;
+        background-color: #01B6FB;
+        color: white;
+        line-height: 2.0533rem;
+        text-align: center;
+        font-size: .7467rem;
+        border-radius: 1.0667rem;
+      }
+    }
+    .icon{
+      float: left;
+      height: .8rem;
+      width: .8rem;
+      background-color: #F94832;
+      border-radius: .1867rem;
+      color: white;
+      font-size: .64rem;
+      text-align: center;
+      margin-right: .5333rem;
+    }
+    .UitpriceStyle{
+      position: absolute;
+      top: 50%;
+      right: 0;
+      transform: translateY(-50%);
+      font-size: .7467rem;
+      > span{
+        font-size: .5333rem;
+      }
     }
   }
 </style>
