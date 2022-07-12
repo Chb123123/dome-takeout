@@ -16,11 +16,16 @@ export default new Vuex.Store({
     shoppingCart: [],
     flag: true,
     // 搜索店铺的历史记录
-    historySubmit: []
+    historySubmit: [],
+    // 是否显示提示弹窗
+    showHint: true
   },
   getters: {
   },
   mutations: {
+    isShowHint (state) {
+      state.showHint = false
+    },
     getUserAbout (state, object) {
       state.userAbout = object
     },

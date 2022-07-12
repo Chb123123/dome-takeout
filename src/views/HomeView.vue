@@ -49,6 +49,7 @@ import Takeaway from '@/components/home/TakeawayDetails.vue'
 import Navber from '@/components/home/navbar/navBarList.vue'
 import { getCurrentAddress } from '@/api/home/getCurrentAddressAPI.js'
 import Tabbar from '../utils/tabbar.vue'
+import { Dialog } from 'vant'
 export default {
   components: {
     Takeaway,
@@ -71,10 +72,10 @@ export default {
     }
   },
   computed: {
-    ...mapState(['detailedAddress', 'addressDetails'])
+    ...mapState(['detailedAddress', 'addressDetails', 'showHint'])
   },
   methods: {
-    ...mapMutations(['newAddress']),
+    ...mapMutations(['newAddress', 'isShowHint']),
     // 前往搜索组件
     gotoSubmitCom () {
       this.$router.push('/submit')
@@ -129,6 +130,15 @@ export default {
     this.getNewCity()
     // this.getTakeawayAbout()
     this.ShopNavBar()
+    if (this.showHint) {
+      Dialog.alert({
+        title: '注意',
+        message: '该项目还处于开发阶段，部分功能还未完成，敬请期待'
+      }).then(() => {
+      // on close
+      })
+      this.isShowHint()
+    }
   }
 }
 </script>
