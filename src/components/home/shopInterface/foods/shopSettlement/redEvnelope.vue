@@ -1,5 +1,6 @@
 <template>
-  <div class="componContainer" @click="redEvnelopeId">
+  <div>
+    <div v-if="sum_condition <= settlementPrice" class="componContainer" @click="redEvnelopeId">
     <div class="redcomponName">
       <span><van-icon name="fire" /></span>
       {{RedConponName}}
@@ -22,6 +23,30 @@
       </div>
     </div>
   </div>
+  <div v-else class="componContainer Not">
+    <div class="redcomponName">
+      <span><van-icon name="fire" /></span>
+      {{RedConponName}}
+    </div>
+    <div class="redComponBox">
+      <div class="redComponintroduce">
+        <div class="Highest">{{ online_paid_only }}
+          <div class="HighestLower"><span>￥</span>{{ availPrice }}</div>
+        </div>
+        <div class="ValidityPeriod">
+          <div class="ValidityPeriodTime">有效期：{{availableRedComponTime  }}</div>
+          <div class="fullReduction">满{{ sum_condition }}元可用</div>
+        </div>
+      </div>
+      <div class="InstructionsForUse">
+        <div class="inforTitle">
+          {{ limited }}
+        </div>
+        <!-- <div class="goToUse" @click="gotoHome">去使用</div> -->
+      </div>
+    </div>
+  </div>
+  </div>
 </template>
 
 <script>
@@ -41,7 +66,9 @@ export default {
     // 金额限定
     sum_condition: {},
     // 使用条件
-    online_paid_only: {}
+    online_paid_only: {},
+    // 结算的金额
+    settlementPrice: {}
   },
   methods: {
     // 获取红包ID
@@ -175,6 +202,24 @@ export default {
           //
         }
       }
+    }
+  }
+  .Not{
+    opacity: 0.5;
+    &::after{
+      content: '未满金额';
+      position: absolute;
+      font-size: .64rem;
+      line-height: 3.2rem;
+      text-align: center;
+      color: #D4BF92;
+      width: 3.2rem;
+      height: 3.2rem;
+      bottom: -0.16rem;
+      right: -0.2667rem;
+      border: .1333rem solid #D4BF92;
+      border-radius: 50%;
+      transform: rotateZ(-35deg);
     }
   }
 </style>

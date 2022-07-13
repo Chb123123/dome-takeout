@@ -6,7 +6,11 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     // 用户信息
-    userAbout: null,
+    // userAbout: null,
+    userAbout: {
+      username: '蔡怀彬',
+      phone: 123242342342
+    },
     addressDetails: {},
     // 详细地址
     detailedAddress: null,

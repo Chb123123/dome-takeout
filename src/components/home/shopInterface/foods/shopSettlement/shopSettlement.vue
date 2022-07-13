@@ -5,8 +5,8 @@
       <div class="back" @click="backShop"><van-icon name="arrow-left" /></div>
     </div>
     <div class="userAddress">
-      <div class="Address">小康超市</div>
-      <div class="userAbout">蔡怀彬</div>
+      <div class="Address">{{ addressDetails.name }}</div>
+      <div class="userAbout">{{ userAbout.username }}</div>
       <div class="delivey">立即送出
         <div class="deliveyTime">预计9:00送到</div>
       </div>
@@ -16,7 +16,7 @@
     </div>
     <div class="userPhone">
       <div class="Phone">用户手机号
-        <span>123455666765</span>
+        <span>{{ userAbout.phone }}</span>
       </div>
       <div class="encryption">供商家、骑士使用（默认加密）</div>
     </div>
@@ -38,14 +38,15 @@
     <div class="settlementMoney">
       <div class="SunMoney">
         <div class="price">合计 ￥<span class="priceStyle">{{ checkedShopSunPrice }}</span></div>
-        <div class="discount">优惠10元</div>
+        <div v-if="isDiscount === false" class="Notdiscount">暂无优惠</div>
+        <div v-else class="discount">优惠{{ checkedRedEvnelope.price }}元</div>
       </div>
       <div v-if="showSettlement" class="settlement" @click="settlement">提交订单</div>
       <div v-else class="settlement" @click="settlement"><van-loading size="0.75rem" color="white">提交订单...</van-loading></div>
     </div>
     <van-action-sheet v-model="show" :closeable="false" title="可用红包">
   <div class="content">
-    <RedEvnelope v-for="item in availableRedComponList" :key="item.id" :availableRedComponTime="item.end_date" :availPrice="item.amount" :online_paid_only="item.description_map.online_paid_only" :limited="item.description_map.phone" :RedConponName="item.name" :sum_condition="item.sum_condition" :GetredEvnelopeId="item.id" @redEvnelopeId="getredEvnelopeId"></RedEvnelope>
+    <RedEvnelope v-for="item in availableRedComponList" :key="item.id" :availableRedComponTime="item.end_date" :availPrice="item.amount" :online_paid_only="item.description_map.online_paid_only" :limited="item.description_map.phone" :RedConponName="item.name" :sum_condition="item.sum_condition" :GetredEvnelopeId="item.id" @redEvnelopeId="getredEvnelopeId" :settlementPrice="checkedShopSunPrice"></RedEvnelope>
   </div>
 </van-action-sheet>
   </div>
@@ -71,11 +72,15 @@ export default {
       checkedShopList: [],
       // 选中的红包
       checkedRedEvnelope: null,
-      checkedShopSunPrice: 5
+      checkedShopSunPrice: 5,
+      // 是否使用优惠券
+      isDiscount: false,
+      // 将之前的优惠券金额存储
+      FrontRedEvnelopePrice: 0
     }
   },
   computed: {
-    ...mapState(['userUseRedEvnelope', 'userCheckedShop'])
+    ...mapState(['userUseRedEvnelope', 'userCheckedShop', 'userAbout', 'addressDetails'])
   },
   methods: {
     ...mapMutations(['getUserUseRedEvnelope', 'clearRedEvnelope']),
@@ -89,11 +94,11 @@ export default {
         if (this.checkedRedEvnelope) {
           this.clearRedEvnelope(this.checkedRedEvnelope.id)
         }
-      }, 2000)
+        this.$router.replace('/orderFinish')
+      }, 2500)
     },
     // 使用红包
     useRedEnvelope () {
-      // console.log('11')
       this.show = true
     },
     async redConpon () {
@@ -109,6 +114,10 @@ export default {
     getredEvnelopeId (val) {
       // console.log(val)
       this.checkedRedEvnelope = val
+      this.checkedShopSunPrice += this.FrontRedEvnelopePrice
+      this.checkedShopSunPrice -= val.price
+      this.isDiscount = true
+      this.FrontRedEvnelopePrice = val.price
       this.show = false
     },
     // 计算商品的总价钱
@@ -137,11 +146,11 @@ export default {
     margin: auto;
     background: -webkit-linear-gradient(top, #01B6FB, #B6E4F8, #F6F6F6);
     overflow-y: auto;
-    padding-bottom: 100px;
+    padding-bottom: 2.6667rem;
     .head{
       position: relative;
-      height: 100px;
-      line-height: 100px;
+      height: 2.6667rem;
+      line-height: 2.6667rem;
       font-size: .7467rem;
       color: white;
       text-align: center;
@@ -310,6 +319,13 @@ export default {
           line-height: .64rem;
           font-size: .64rem;
           color: #EE502E;
+        }
+        .Notdiscount{
+          text-align: right;
+          height: .64rem;
+          line-height: .64rem;
+          font-size: .64rem;
+          color: #888;
         }
       }
       .settlement{
