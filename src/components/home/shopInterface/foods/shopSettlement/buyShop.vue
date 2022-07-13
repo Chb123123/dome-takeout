@@ -1,20 +1,29 @@
 <template>
   <div class="buyShopContainer">
     <div class="shopImg">
-      i
+      <img :src="'http://elm.cangdu.org/img/' + shopImg" alt="">
     </div>
     <div class="shopAbout">
-      <div class="foodName">窑鸡王
-        <div class="unitPrice">￥<span>12</span></div>
+      <div class="foodName">{{ shopName }}
+        <div class="unitPrice">￥<span>{{ shopPrice }}</span></div>
       </div>
-      <div class="shopCount">X<span>1</span></div>
+      <div class="shopCount">X<span>{{ shopCount }}</span></div>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-
+  props: {
+    // 商品图片
+    shopImg: {},
+    // 商品名称
+    shopName: {},
+    // 商品价格
+    shopPrice: {},
+    // 商品数量
+    shopCount: {}
+  }
 }
 </script>
 
@@ -33,6 +42,7 @@ export default {
       > img{
         width: 100%;
         height: 100%;
+        border-radius: .2667rem;
       }
     }
     .shopAbout{

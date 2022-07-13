@@ -63,7 +63,7 @@ import ShopCommemt from '@/components/home/shopInterface/foodComment/foodComment
 import CheckedFood from '@/components/home/shopInterface/foods/checkedFoods/checkedFoods.vue'
 import Bus from '@/EventBus/EventBus'
 import { getShopInterface } from '@/api/home/shopInterface/shopInterface'
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import Foods from '@/components/home/shopInterface/foods/foods.vue'
 export default {
   components: {
@@ -112,6 +112,7 @@ export default {
     window.addEventListener('scroll', this.handleScrollx, true)
   },
   methods: {
+    ...mapMutations(['getUserCheckedShop']),
     aaa () {
       Toast.fail('无法领取')
     },
@@ -175,6 +176,7 @@ export default {
     },
     // 点击去结算，前往结算界面
     gotoSettlement () {
+      this.getUserCheckedShop(this.checkedFoods)
       this.$router.push('/settlement')
     }
   },

@@ -14,10 +14,14 @@ import { getAvailableRedCompon } from '@/api/user/RedCompon/availableRedCompon'
 // 导入红包组件
 import RedConpon from './coupon/redCoupon.vue'
 import ExpiredRedCoupon from './coupon/ExpiredRedCoupon.vue'
+import { mapState, mapMutations } from 'vuex'
 export default {
   components: {
     RedConpon,
     ExpiredRedCoupon
+  },
+  computed: {
+    ...mapState(['userUseRedEvnelope'])
   },
   data () {
     return {
@@ -32,17 +36,22 @@ export default {
     }
   },
   methods: {
+    ...mapMutations(['getUserUseRedEvnelope']),
     back () {
       this.$router.back(-1)
     },
     // 获取可用红包列表
     async redConpon () {
-      const res = await getAvailableRedCompon()
-      this.availableRedComponList = res.data
-      // console.log(res.data)
-      const res1 = await getExpiredRedCompon()
-      this.expiredRedCoupon = res1.data
-      // console.log(res1.data)
+      if (this.userUseRedEvnelope) {
+        this.expiredRedCoupon = this.userUseRedEvnelope
+      } else {
+        const res = await getAvailableRedCompon()
+        this.getUserUseRedEvnelope(res.data)
+        this.expiredRedCoupon = this.userUseRedEvnelope
+        const res1 = await getExpiredRedCompon()
+        this.expiredRedCoupon = res1.data
+        // console.log(res1.data)
+      }
     }
   },
   created () {

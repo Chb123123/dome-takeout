@@ -22,41 +22,63 @@
     </div>
     <div class="shopAbout">
       <div class="shoppingName">奶茶</div>
-      <BuyShop></BuyShop>
+      <BuyShop v-for="item in checkedShopList" :key="item.id" :shopCount="item.__v" :shopImg="item.image_path" :shopName="item.name" :shopPrice="item.specfoods[0].price"></BuyShop>
       <div class="delivery"><div class="icon">￥</div>打包费
         <div class="UitpriceStyle"><span>￥</span>0</div>
       </div>
       <div class="delivery"><div class="icon">￥</div>配送费
         <div class="UitpriceStyle"><span>￥</span>5</div>
       </div>
-      <div class="delivery"><div class="icon"><van-icon name="coupon" /></div>使用红包
+      <div class="delivery" @click="useRedEnvelope"><div class="icon"><van-icon name="coupon" /></div>使用红包
         <!-- <div class="UitpriceStyle"><span>￥</span>5</div> -->
-        <div class="useRedConpon">未使用红包<van-icon name="arrow" /></div>
+        <div v-if="checkedRedEvnelope === null" class="useRedConpon">未使用红包<van-icon name="arrow" /></div>
+        <div v-else class="useRedConpon"><span>-￥</span>{{ checkedRedEvnelope.price }}</div>
       </div>
     </div>
     <div class="settlementMoney">
       <div class="SunMoney">
-        <div class="price">合计 ￥<span class="priceStyle">20</span></div>
+        <div class="price">合计 ￥<span class="priceStyle">{{ checkedShopSunPrice }}</span></div>
         <div class="discount">优惠10元</div>
       </div>
       <div v-if="showSettlement" class="settlement" @click="settlement">提交订单</div>
       <div v-else class="settlement" @click="settlement"><van-loading size="0.75rem" color="white">提交订单...</van-loading></div>
     </div>
+    <van-action-sheet v-model="show" :closeable="false" title="可用红包">
+  <div class="content">
+    <RedEvnelope v-for="item in availableRedComponList" :key="item.id" :availableRedComponTime="item.end_date" :availPrice="item.amount" :online_paid_only="item.description_map.online_paid_only" :limited="item.description_map.phone" :RedConponName="item.name" :sum_condition="item.sum_condition" :GetredEvnelopeId="item.id" @redEvnelopeId="getredEvnelopeId"></RedEvnelope>
+  </div>
+</van-action-sheet>
   </div>
 </template>
 
 <script>
+// 获取可用红包
+import { getAvailableRedCompon } from '@/api/user/RedCompon/availableRedCompon'
+import RedEvnelope from './redEvnelope.vue'
 import BuyShop from './buyShop.vue'
+import { mapMutations, mapState } from 'vuex'
 export default {
   components: {
-    BuyShop
+    BuyShop,
+    RedEvnelope
   },
   data () {
     return {
-      showSettlement: true
+      showSettlement: true,
+      show: false,
+      availableRedComponList: [],
+      // 选中的商品
+      checkedShopList: [],
+      // 选中的红包
+      checkedRedEvnelope: null,
+      checkedShopSunPrice: 5
     }
   },
+  computed: {
+    ...mapState(['userUseRedEvnelope', 'userCheckedShop'])
+  },
   methods: {
+    ...mapMutations(['getUserUseRedEvnelope', 'clearRedEvnelope']),
     backShop () {
       this.$router.back(-1)
     },
@@ -64,8 +86,46 @@ export default {
       this.showSettlement = false
       setTimeout(() => {
         this.showSettlement = true
+        if (this.checkedRedEvnelope) {
+          this.clearRedEvnelope(this.checkedRedEvnelope.id)
+        }
       }, 2000)
+    },
+    // 使用红包
+    useRedEnvelope () {
+      // console.log('11')
+      this.show = true
+    },
+    async redConpon () {
+      if (this.userUseRedEvnelope) {
+        this.availableRedComponList = this.userUseRedEvnelope
+      } else {
+        const res = await getAvailableRedCompon()
+        this.getUserUseRedEvnelope(res.data)
+        this.availableRedComponList = this.userUseRedEvnelope
+      }
+    },
+    // 接收子组件传递过来的参数
+    getredEvnelopeId (val) {
+      // console.log(val)
+      this.checkedRedEvnelope = val
+      this.show = false
+    },
+    // 计算商品的总价钱
+    sunPrice () {
+      this.userCheckedShop.forEach(element => {
+        console.log(element)
+        // eslint-disable-next-line no-const-assign
+        this.checkedShopSunPrice += element.__v * element.specfoods[0].price
+      })
+      this.checkedShopList = this.userCheckedShop
     }
+  },
+  created () {
+    this.sunPrice()
+    // this.checkedShopList = this.userCheckedShop
+    this.redConpon()
+    // console.log(this.userCheckedShop)
   }
 }
 </script>
@@ -205,6 +265,9 @@ export default {
           font-size: .64rem;
           color: #777;
           // line-height: ;
+          > span {
+            font-size: .64rem;
+          }
         }
       }
     }
@@ -280,6 +343,15 @@ export default {
       > span{
         font-size: .5333rem;
       }
+    }
+    /deep/.van-action-sheet__header{
+      font-size: .64rem;
+    }
+    .content{
+      height: 60vh;
+      padding: .8rem .6667rem;
+      overflow-y: auto;
+      // background-color: red;
     }
   }
 </style>

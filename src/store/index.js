@@ -18,7 +18,11 @@ export default new Vuex.Store({
     // 搜索店铺的历史记录
     historySubmit: [],
     // 是否显示提示弹窗
-    showHint: true
+    showHint: true,
+    // 用户可用红包
+    userUseRedEvnelope: null,
+    // 用户选中的商品列表
+    userCheckedShop: []
   },
   getters: {
   },
@@ -63,6 +67,25 @@ export default new Vuex.Store({
     // 触发事件，清空历史记录
     clearhistorySubmit (state) {
       state.historySubmit = []
+    },
+    // 第一次发起红包请求时，将数据存储到userUseRedEvnelope
+    getUserUseRedEvnelope (state, object) {
+      state.userUseRedEvnelope = object
+    },
+    // 当用户点击提交订单时，扣除选中的红包
+    clearRedEvnelope (state, id) {
+      console.log(id)
+      console.log(state.userUseRedEvnelope)
+      // eslint-disable-next-line array-callback-return
+      state.userUseRedEvnelope.some((item, index) => {
+        if (item.id === id) {
+          state.userUseRedEvnelope.splice(index, 1)
+        }
+      })
+    },
+    // 当用户点击结算时，将选中的商品列表存储到 userCheckedShop
+    getUserCheckedShop (state, object) {
+      state.userCheckedShop = object
     }
   },
   actions: {
