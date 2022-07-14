@@ -58,6 +58,7 @@ import { getAvailableRedCompon } from '@/api/user/RedCompon/availableRedCompon'
 import RedEvnelope from './redEvnelope.vue'
 import BuyShop from './buyShop.vue'
 import { mapMutations, mapState } from 'vuex'
+import { Toast } from 'vant'
 export default {
   components: {
     BuyShop,
@@ -80,22 +81,46 @@ export default {
     }
   },
   computed: {
-    ...mapState(['userUseRedEvnelope', 'userCheckedShop', 'userAbout', 'addressDetails'])
+    ...mapState(['userUseRedEvnelope', 'userCheckedShop', 'userAbout', 'addressDetails', 'shop', 'userBalance'])
   },
   methods: {
-    ...mapMutations(['getUserUseRedEvnelope', 'clearRedEvnelope']),
+    ...mapMutations(['getUserUseRedEvnelope', 'clearRedEvnelope', 'getOrderElement', 'reduceBalance']),
     backShop () {
       this.$router.back(-1)
     },
     settlement () {
-      this.showSettlement = false
-      setTimeout(() => {
-        this.showSettlement = true
-        if (this.checkedRedEvnelope) {
-          this.clearRedEvnelope(this.checkedRedEvnelope.id)
+      const Balance = this.checkedShopSunPrice - this.FrontRedEvnelopePrice
+      // this.reduceBalance(Balance)
+      if (this.userBalance - Balance > 0) {
+        this.showSettlement = false
+        this.reduceBalance(Balance)
+        setTimeout(() => {
+          this.showSettlement = true
+          if (this.checkedRedEvnelope) {
+            this.clearRedEvnelope(this.checkedRedEvnelope.id)
+          }
+          this.$router.replace('/orderFinish')
+        }, 2500)
+        const data = {
+          // 商品总价
+          totalPrice: this.checkedShopSunPrice,
+          // 优惠券金额
+          discount: this.FrontRedEvnelopePrice,
+          // 店铺名称
+          shopPingName: this.shop.name,
+          // 结算价格
+          Balance: Balance,
+          // 下单时间
+          deliveryTime: +new Date(),
+          // 交易状态
+          orderState: '交易成功',
+          // 选中的商品
+          checkedShop: this.checkedShopList
         }
-        this.$router.replace('/orderFinish')
-      }, 2500)
+        this.getOrderElement(data)
+      } else {
+        Toast.fail('余额不足')
+      }
     },
     // 使用红包
     useRedEnvelope () {

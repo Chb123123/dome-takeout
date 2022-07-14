@@ -12,7 +12,7 @@
       <div class="voucher">
         <div class="RedEnvelope" @click="gotoRedEnvelope">
           <div class="RedEnvelopeTop"><span style="color: #F74E44;"><van-icon name="coupon" /></span> 红包/神券</div>
-          <div class="RedEnvelopeBottom"><span>3</span>个未使用</div>
+          <div class="RedEnvelopeBottom"><span v-if="userUseRedEvnelope">{{ userUseRedEvnelope.length }}</span><span v-else>3</span>个未使用</div>
         </div>
         <div class="RedEnvelope" @click="show">
           <div class="RedEnvelopeTop"><span style="color:#FEA238;"><van-icon name="gold-coin" /></span> 代金券</div>
@@ -23,6 +23,12 @@
           <div class="RedEnvelopeBottom">暂无</div>
         </div>
       </div>
+    </div>
+    <!-- 用户余额 -->
+    <div class="balance">
+      <div class="headbalance">账户余额</div>
+      <div v-if="userAbout" class="balancePrice"><span>￥</span>{{ userBalance }}</div>
+      <div v-else class="notLogin">请登入</div>
     </div>
     <div class="collect" @click="show">
       <div class="collectTitle">我的收藏</div>
@@ -68,7 +74,7 @@ export default {
     [Notify.Component.name]: Notify.Component
   },
   computed: {
-    ...mapState(['userAbout'])
+    ...mapState(['userAbout', 'userUseRedEvnelope', 'userBalance'])
   },
   methods: {
     successLogin () {
@@ -184,6 +190,33 @@ export default {
           }
         }
       }
+    }
+    .balance{
+      height: 5.3333rem;
+      width: 18.8rem;
+      background-color: white;
+      border-radius: .5333rem;
+      padding-top: .9333rem;
+      padding-left: .6667rem;
+      margin: 0 auto .5333rem;
+      .headbalance{
+        height: .7467rem;
+        line-height: .7467rem;
+        font-size: .7467rem;
+        margin-bottom: 1.0667rem;
+      }
+      .balancePrice{
+          height: 1.0667rem;
+          line-height: 1.0667rem;
+          font-size: 1.12rem;
+          > span {
+            font-size: .64rem;
+          }
+        }
+        .notLogin{
+          font-size: .64rem;
+          color: #666;
+        }
     }
     .collect{
       height: 4.8rem;

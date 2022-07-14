@@ -62,7 +62,7 @@ export default {
       if (this.username.length === 0 || this.passwd.length === 0 || this.InpoutverificationCode.length === 0) {
         alert('登入失败')
       } else {
-        if (this.phone.length <= 11) {
+        if (this.phone.length < 11) {
           alert('手机号码有误')
         } else {
           const res = await loginApi(this.username, this.passwd, this.InpoutverificationCode)

@@ -19,10 +19,7 @@
       <Navber :navList="shopNavList"></Navber>
     </div>
     <div class="Attributes">
-      <span>智能排序</span>
-      <span>配送速度</span>
-      <span>距离最近</span>
-      <span>销量最高</span>
+      <span v-for="(item ,index) in shopNav" :key="index" :class="item.class" @click="checkedBtn(index)">{{ item.text }}</span>
     </div>
     <div class="takewayBox">
       <van-list
@@ -61,6 +58,7 @@ export default {
       address: {},
       // 店铺列表
       shopList: [],
+      shopList_1: [],
       // 是否加载
       loading: true,
       // 数据是否加载完成
@@ -68,7 +66,16 @@ export default {
       // 当前店铺偏移的数量
       num: 0,
       // 商品导航栏
-      shopNavList: []
+      shopNavList: [],
+      // 获取商品排序的ID
+      order_by: 4,
+      // 商店标签栏
+      shopNav: [
+        { class: 'checkedStyle', text: '智能排序' },
+        { class: '', text: '配送速度' },
+        { class: '', text: '距离最近' },
+        { class: '', text: '销量最高' }
+      ]
     }
   },
   computed: {
@@ -83,14 +90,15 @@ export default {
     async getTakeawayAbout () {
       // console.log(this.addressDetails.latitude, this.num)
       // console.log(this.$store.state.addressDetails.longitude)
-      const res = await TackawayAboutList(this.address.longitude, this.address.latitude)
+      const res = await TackawayAboutList(this.address.longitude, this.address.latitude, this.num, this.order_by)
       this.shopList = res.data
+      this.shopList_1 = res.data
       this.loading = false
     },
     // 下拉触发事件
     async onLoad () {
       this.num += 20
-      const res = await TackawayAboutList(this.address.longitude, this.address.latitude, this.num)
+      const res = await TackawayAboutList(this.address.longitude, this.address.latitude, this.num, this.order_by)
       this.shopList = [...this.shopList, ...res.data]
       this.loading = false
     },
@@ -124,6 +132,32 @@ export default {
     // 点击跳转到搜索界面
     gotoSubmit () {
       this.$router.push('/submitarea')
+    },
+    // 点击切换状态栏
+    async checkedBtn (index) {
+      this.shopList = []
+      // eslint-disable-next-line array-callback-return
+      this.shopNav.some((item) => {
+        item.class = ''
+      })
+      this.shopNav[index].class = 'checkedStyle'
+      if (index === 0) {
+        this.order_by = 4
+        this.shopList = this.shopList_1
+      } else if (index === 1) {
+        this.order_by = 2
+        const res = await TackawayAboutList(this.address.longitude, this.address.latitude, this.num, this.order_by)
+        this.shopList = res.data
+      } else if (index === 2) {
+        this.order_by = 5
+        const res = await TackawayAboutList(this.address.longitude, this.address.latitude, this.num, this.order_by)
+        this.shopList = res.data
+      } else {
+        this.order_by = 6
+        const res = await TackawayAboutList(this.address.longitude, this.address.latitude, this.num, this.order_by)
+        this.shopList = res.data
+      }
+      console.log(index)
     }
   },
   created () {
@@ -250,6 +284,10 @@ export default {
         border-radius: .2667rem;
         color: #626262;
         font-size: .64rem;
+      }
+      .checkedStyle{
+        background-color: #0BB7F7;
+        color: white;
       }
     }
   }

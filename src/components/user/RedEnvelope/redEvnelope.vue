@@ -25,6 +25,7 @@ export default {
   },
   data () {
     return {
+      // 可用红包
       availableRedComponList: [],
       expiredRedCoupon: [],
       value1: 0,
@@ -43,19 +44,23 @@ export default {
     // 获取可用红包列表
     async redConpon () {
       if (this.userUseRedEvnelope) {
-        this.expiredRedCoupon = this.userUseRedEvnelope
+        this.availableRedComponList = this.userUseRedEvnelope
+        const res1 = await getExpiredRedCompon()
+        this.expiredRedCoupon = res1.data
+        console.log(res1.data)
       } else {
         const res = await getAvailableRedCompon()
         this.getUserUseRedEvnelope(res.data)
-        this.expiredRedCoupon = this.userUseRedEvnelope
+        this.availableRedComponList = this.userUseRedEvnelope
         const res1 = await getExpiredRedCompon()
         this.expiredRedCoupon = res1.data
-        // console.log(res1.data)
+        console.log(res1.data)
       }
     }
   },
   created () {
     this.redConpon()
+    console.log('11')
   }
 }
 </script>

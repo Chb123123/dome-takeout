@@ -105,7 +105,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['shop'])
+    ...mapState(['shop', 'userAbout'])
   },
   mounted () {
     // 注册屏幕滚动事件
@@ -176,8 +176,13 @@ export default {
     },
     // 点击去结算，前往结算界面
     gotoSettlement () {
-      this.getUserCheckedShop(this.checkedFoods)
-      this.$router.push('/settlement')
+      if (this.userAbout === null) {
+        // console.log('11')
+        Toast.fail('未登录')
+      } else {
+        this.getUserCheckedShop(this.checkedFoods)
+        this.$router.push('/settlement')
+      }
     }
   },
   created () {

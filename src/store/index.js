@@ -26,7 +26,13 @@ export default new Vuex.Store({
     // 用户可用红包
     userUseRedEvnelope: null,
     // 用户选中的商品列表
-    userCheckedShop: []
+    userCheckedShop: [],
+    // 订单详情
+    OrderElement: null,
+    // 完成的订单列表
+    completedOrder: [],
+    // 用户余额
+    userBalance: 200
   },
   getters: {
   },
@@ -90,6 +96,16 @@ export default new Vuex.Store({
     // 当用户点击结算时，将选中的商品列表存储到 userCheckedShop
     getUserCheckedShop (state, object) {
       state.userCheckedShop = object
+      // 将完成的订单添加到完成的订单列表
+      state.completedOrder.push(object)
+    },
+    // 获取用户订单详情
+    getOrderElement (state, object) {
+      state.OrderElement = object
+    },
+    // 当点击结算时减少用户余额
+    reduceBalance (state, price) {
+      state.userBalance -= price
     }
   },
   actions: {
