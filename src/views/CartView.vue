@@ -8,20 +8,22 @@
       <span  v-if="showNav === 2"  @click="allBtn(2)">未完成</span>
       <span v-else class="notCheck" @click="allBtn(2)">未完成</span>
     </div>
-    <div v-if="orderList.length !== 0">
+    <div v-if="orderList.length !== 0 || notFinish.length !== 0">
       <van-list
   v-model="loading"
   :finished="finished"
   finished-text="没有更多了"
   @load="onLoad"
 >
-  <!-- <div v-if="completedOrder.length > 0">
-    <MyCompletedOrder v-for="item in orderList" :key="item._id" :shoppingname="item.restaurant_name" :shoppingImg="item.restaurant_image_url" :orderState="item.status_bar.title" :shop="item.basket.group[0][0].name" :deliveryTime="item.formatted_created_at" :TradingInformation="item.status_bar.title" :shopPrice="item.basket.group[0][0].price" :quantity="item.basket.group[0][0].quantity"></MyCompletedOrder>
-  </div> -->
-  <Order v-for="item in orderList" :key="item._id" :shoppingname="item.restaurant_name" :shoppingImg="item.restaurant_image_url" :orderState="item.status_bar.title" :shop="item.basket.group[0][0].name" :deliveryTime="item.formatted_created_at" :TradingInformation="item.status_bar.title" :shopPrice="item.basket.group[0][0].price" :quantity="item.basket.group[0][0].quantity"></Order>
+  <div v-if="completedOrder.length > 0 && showYesOrder===true" >
+    <MyComp v-for="(item, index) in orderList" :key="index" :shoppingname="item.shopPingName" :shoppingImg="item.shoppingImg" :orderState="item.orderState" :shop="item.checkedShop" :deliveryTime="item.deliveryTime" :shopPrice="item.Balance"></MyComp>
+  </div>
+  <div v-if="showNotOrder===true">
+    <Order v-for="item in notFinish" :key="item._id" :shoppingname="item.restaurant_name" :shoppingImg="item.restaurant_image_url" :orderState="item.status_bar.title" :shop="item.basket.group[0][0].name" :deliveryTime="item.formatted_created_at" :TradingInformation="item.status_bar.title" :shopPrice="item.basket.group[0][0].price" :quantity="item.basket.group[0][0].quantity"></Order>
+  </div>
 </van-list>
     </div>
-    <div>
+    <div  v-else>
       <van-empty description="暂无订单" />
     </div>
     <Tabbar></Tabbar>
@@ -32,18 +34,18 @@
 // 获取订单列表
 import { getOrderList } from '@/api/order/getOrderListAPI'
 import Order from '@/components/order/orderCom.vue'
-// import MyCompletedOrder from '@/components/order/completedOrder.vue'
+import MyComp from '@/components/order/completedOrder.vue'
 // 导航栏组件
 import Tabbar from '../utils/tabbar.vue'
 import { mapState } from 'vuex'
 export default {
   components: {
     Tabbar,
-    Order
-    // MyCompletedOrder
+    Order,
+    MyComp
   },
   computed: {
-    ...mapState(['completedOrder'])
+    ...mapState(['completedOrder', 'OrderElement'])
   },
   data () {
     return {
@@ -57,7 +59,11 @@ export default {
       // 设置请求数据跳过的数量
       num: 0,
       // 显示当前导航栏的标签id
-      showNav: 0
+      showNav: 0,
+      // 显示已完成订单列表
+      showYesOrder: true,
+      // 显示未完成订单列表
+      showNotOrder: true
     }
   },
   methods: {
@@ -65,13 +71,15 @@ export default {
       this.num += 20
       const res = await getOrderList(20, this.num)
       // console.log(res.data)
-      this.orderList = [...this.orderList, ...res.data]
+      this.notFinish = [...this.notFinish, ...res.data]
       this.loading = false
     },
     async getOrderLiet () {
       const res = await getOrderList(20, 0)
       // console.log(res.data)
-      this.orderList = res.data
+      if (this.completedOrder) {
+        this.orderList = this.completedOrder
+      }
       this.notFinish = res.data
       this.loading = false
     },
@@ -79,16 +87,23 @@ export default {
       // console.log(num)
       this.showNav = num
       if (num === 1) {
-        this.orderList = []
+        this.showYesOrder = true
+        this.showNotOrder = false
+        this.orderList = this.completedOrder
       } else if (num === 2) {
-        this.orderList = this.notFinish
+        this.showYesOrder = false
+        this.showNotOrder = true
+        // this.orderList = this.notFinish
       } else {
-        this.orderList = this.notFinish
+        this.showYesOrder = true
+        this.showNotOrder = true
+        // this.orderList = this.notFinish
       }
     }
   },
   created () {
     this.getOrderLiet()
+    // console.log(this.getNewTime())
   }
 }
 </script>

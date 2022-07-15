@@ -97,11 +97,13 @@ export default new Vuex.Store({
     getUserCheckedShop (state, object) {
       state.userCheckedShop = object
       // 将完成的订单添加到完成的订单列表
-      state.completedOrder.push(object)
+      // console.log(object)
+      // 将获取的用户订单存放到
     },
     // 获取用户订单详情
     getOrderElement (state, object) {
       state.OrderElement = object
+      state.completedOrder.push(state.OrderElement)
     },
     // 当点击结算时减少用户余额
     reduceBalance (state, price) {

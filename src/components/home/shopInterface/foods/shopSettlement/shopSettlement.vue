@@ -89,6 +89,7 @@ export default {
       this.$router.back(-1)
     },
     settlement () {
+      // 获取当前下单的时间
       const Balance = this.checkedShopSunPrice - this.FrontRedEvnelopePrice
       // this.reduceBalance(Balance)
       if (this.userBalance - Balance > 0) {
@@ -108,16 +109,19 @@ export default {
           discount: this.FrontRedEvnelopePrice,
           // 店铺名称
           shopPingName: this.shop.name,
+          // 店铺图片
+          shoppingImg: this.shop.image_path,
           // 结算价格
           Balance: Balance,
           // 下单时间
-          deliveryTime: +new Date(),
+          deliveryTime: this.getNewTime(),
           // 交易状态
           orderState: '交易成功',
           // 选中的商品
           checkedShop: this.checkedShopList
         }
         this.getOrderElement(data)
+        console.log(data)
       } else {
         Toast.fail('余额不足')
       }
@@ -125,6 +129,16 @@ export default {
     // 使用红包
     useRedEnvelope () {
       this.show = true
+    },
+    // 获取当前的时间
+    getNewTime () {
+      const NewTime = new Date()
+      const Year = NewTime.getFullYear()
+      const Month = NewTime.getMonth() + 1
+      const D = NewTime.getDate()
+      const H = NewTime.getHours()
+      const M = NewTime.getMinutes()
+      return Year + '-' + Month + '-' + D + ' ' + H + ':' + M
     },
     async redConpon () {
       if (this.userUseRedEvnelope) {
@@ -148,7 +162,7 @@ export default {
     // 计算商品的总价钱
     sunPrice () {
       this.userCheckedShop.forEach(element => {
-        console.log(element)
+        // console.log(element)
         // eslint-disable-next-line no-const-assign
         this.checkedShopSunPrice += element.__v * element.specfoods[0].price
       })

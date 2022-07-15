@@ -6,16 +6,28 @@
         <img :src="'https://elm.cangdu.org/img/'+shoppingImg" alt="">
       </div>
       <div class="shoppingname">{{ shoppingname }}</div>
-      <div class="Orderstate">交易成功</div>
+      <div class="Orderstate">已送达</div>
     </div>
     <div class="deliveryState">{{ TradingInformation }}</div>
     <div class="deliveryTime">{{ deliveryTime }}</div>
-    <div class="shop">
+    <div v-if="shop.length === 1" class="shop">
       <div class="firstShopImg">
-        <img :src="'https://elm.cangdu.org/img/'+shoppingImg" alt="">
+        <img :src="'https://elm.cangdu.org/img/'+shop[0].image_path" alt="">
       </div>
       <div class="orderAbout">
-        {{ shop }}
+        {{ shop[0].name }}
+      </div>
+      <div class="price">
+        <div class="shopPrice"><span class="priceStyle">&yen;</span>&nbsp;{{ price }}</div>
+        <div class="shopCount">共{{ quantity }}件</div>
+      </div>
+    </div>
+    <!-- 多个商品 -->
+    <div v-if="shop.length > 1" class="multipleShop">
+      <div class="shopImgBox">
+        <div class="firstShopImg" v-for="(item, index) in shop" :key="index">
+        <img :src="'https://elm.cangdu.org/img/'+item.image_path" alt="">
+      </div>
       </div>
       <div class="price">
         <div class="shopPrice"><span class="priceStyle">&yen;</span>&nbsp;{{ price }}</div>
@@ -39,11 +51,15 @@ export default {
     // 商品
     shop: {},
     // 交易信息
-    TradingInformation: {},
+    TradingInformation: {
+      default: '交易成功'
+    },
     // 商品价格
     shopPrice: {},
     // 商品数量
-    quantity: {}
+    quantity: {
+      default: 1
+    }
   },
   data () {
     return {
@@ -51,6 +67,7 @@ export default {
     }
   },
   created () {
+    // aaa = aaa / 1000
     this.price = this.shopPrice * this.quantity
   }
 }
@@ -143,6 +160,60 @@ export default {
         // background-color: red;
         border-radius: .5333rem;
         border: .0267rem solid #ccc;
+        > img{
+          width: 100%;
+          height: 100%;
+          border-radius: .5333rem;
+        }
+      }
+      .orderAbout{
+        width: 12rem;
+        line-height: 3.4667rem;
+        // background-color: red;
+        padding-left: .4rem;
+        font-size: .7467rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .price{
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        top: 50%;
+        transform: translateY(-50%);
+        right: 0;
+        height: 1.8667rem;
+      }
+      .shopPrice{
+        font-size: .7467rem;
+        color: #171717;
+      }
+      .shopCount{
+        font-size: .5333rem;
+        color: #B0B0B0;
+      }
+    }
+    .multipleShop{
+      position: relative;
+      display: flex;
+      margin-top: 1.4667rem;
+      height: 3.4667rem;
+      .shopImgBox{
+        // flex: 1;
+        width: 15.2rem;
+        height: 3.4667rem;
+        display: flex;
+        overflow-y: auto;
+      }
+      .firstShopImg{
+        width: 3.4667rem;
+        height: 3.4667rem;
+        // background-color: red;
+        border-radius: .5333rem;
+        border: .0267rem solid #ccc;
+        margin-right: .5333rem;
         > img{
           width: 100%;
           height: 100%;
