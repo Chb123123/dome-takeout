@@ -9,19 +9,19 @@
       <span v-else class="notCheck" @click="allBtn(2)">未完成</span>
     </div>
     <div v-if="orderList.length !== 0 || notFinish.length !== 0">
-      <van-list
-  v-model="loading"
-  :finished="finished"
-  finished-text="没有更多了"
-  @load="onLoad"
->
+          <van-list
+      v-model="loading"
+      :finished="finished"
+      finished-text="没有更多了"
+      @load="onLoad"
+    >
   <div v-if="completedOrder.length > 0 && showYesOrder===true" >
     <MyComp v-for="(item, index) in orderList" :key="index" :shoppingname="item.shopPingName" :shoppingImg="item.shoppingImg" :orderState="item.orderState" :shop="item.checkedShop" :deliveryTime="item.deliveryTime" :shopPrice="item.Balance"></MyComp>
   </div>
   <div v-if="showNotOrder===true">
     <Order v-for="item in notFinish" :key="item._id" :shoppingname="item.restaurant_name" :shoppingImg="item.restaurant_image_url" :orderState="item.status_bar.title" :shop="item.basket.group[0][0].name" :deliveryTime="item.formatted_created_at" :TradingInformation="item.status_bar.title" :shopPrice="item.basket.group[0][0].price" :quantity="item.basket.group[0][0].quantity"></Order>
   </div>
-</van-list>
+    </van-list>
     </div>
     <div  v-else>
       <van-empty description="暂无订单" />

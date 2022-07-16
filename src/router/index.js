@@ -13,6 +13,8 @@ import OrderFinish from '@/components/home/shopInterface/foods/shopSettlement/Or
 import PositionCity from '@/components/home/submitArea/positionCity.vue'
 // 商店详情页
 import shopInterface from '@/components/home/shopInterface/shopInterface.vue'
+// 导航栏详情页
+import NavPage from '@/components/home/navbar/navPage.vue'
 
 // import { createRouter, createWebHashHistory } from 'vue-router'
 
@@ -29,7 +31,8 @@ const routes = [
   { path: '/redEnvelope', component: redEvnelope },
   { path: '/login', component: Login },
   { path: '/settlement', component: Settlement },
-  { path: '/orderFinish', component: OrderFinish }
+  { path: '/orderFinish', component: OrderFinish },
+  { path: '/navPage', component: NavPage }
 ]
 
 const router = new VueRouter({

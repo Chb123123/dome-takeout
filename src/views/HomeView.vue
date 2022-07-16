@@ -3,8 +3,8 @@
     <div class="Apphead">
       <div class="address" @click="gotoSubmit">{{ address.name }} <span class="move"></span></div>
       <div class="address" @click="gotoSubmit">{{ address.name }} <span class="move"></span></div>
-      <div class="shopping-cart"><van-icon name="cart-o" /></div>
-      <div class="Private-letter"><van-icon name="comment-o" /></div>
+      <div class="shopping-cart" @click="gotoOrede"><van-icon name="cart-o" /></div>
+      <div class="Private-letter" @click="information"><van-icon name="comment-o" /></div>
     </div>
     <!-- 搜索模块 -->
     <div class="submitBox" @click="gotoSubmitCom">
@@ -46,7 +46,7 @@ import Takeaway from '@/components/home/TakeawayDetails.vue'
 import Navber from '@/components/home/navbar/navBarList.vue'
 import { getCurrentAddress } from '@/api/home/getCurrentAddressAPI.js'
 import Tabbar from '../utils/tabbar.vue'
-import { Dialog } from 'vant'
+import { Dialog, Toast } from 'vant'
 export default {
   components: {
     Takeaway,
@@ -158,6 +158,15 @@ export default {
         this.shopList = res.data
       }
       console.log(index)
+    },
+    gotoOrede () {
+      this.$router.push('/cart')
+    },
+    information () {
+      Toast({
+        message: '暂无功能',
+        icon: 'comment-o'
+      })
     }
   },
   created () {

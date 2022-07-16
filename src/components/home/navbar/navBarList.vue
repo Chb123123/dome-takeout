@@ -9,7 +9,7 @@
   <van-swipe class="my-swipe" indicator-color="#0BB7F7">
   <van-swipe-item  v-for="i in navList" :key="i.id">
     <div class="navbarContainer">
-    <div class="nav" v-for="item in i" :key="item.id" @click="getNavId(item.id)">
+    <div class="nav" v-for="item in i" :key="item.id" @click="getNavId(item.id, item.title)">
       <img :src="'https://fuss10.elemecdn.com'+ item.image_url" alt="">
       <span class="navtitle">{{ item.title }}</span>
     </div>
@@ -25,8 +25,9 @@ export default {
     navList: {}
   },
   methods: {
-    getNavId (id) {
-      console.log(id)
+    getNavId (id, title) {
+      // console.log(id, title)
+      this.$router.push('/navPage?id=' + id + '&title=' + title)
     }
   }
 }

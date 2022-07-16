@@ -5,7 +5,7 @@
       <div class="submitInput"><input type="text" v-model="shopkeyword" placeholder="派乐堡炸鸡">
       <div class="submitIcon"><van-icon name="search" /></div>
       </div>
-      <div class="submitBtn">搜索</div>
+      <div class="submitBtn" @click="submitShopping">搜索</div>
     </div>
     <div class="box">
       <div class="historySubmit">历史搜索
@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import { Dialog } from 'vant'
+import { Dialog, Toast } from 'vant'
 // 点击搜索列表，将点击的列表关键字保存到vuex
 import { mapState, mapMutations } from 'vuex'
 // 导入搜索商店组件
@@ -39,7 +39,9 @@ export default {
       // 搜索关键字
       shopkeyword: '',
       // 搜索店铺列表
-      shopList: []
+      shopList: [],
+      // 设置防抖
+      flag: null
     }
   },
   components: {
@@ -70,18 +72,27 @@ export default {
     },
     back () {
       this.$router.back(-1)
+    },
+    submitShopping () {
+      Toast.fail('暂无店铺信息')
     }
   },
   watch: {
-    async shopkeyword () {
-      if (this.shopkeyword !== '') {
-        const geohash = this.addressDetails.latitude + ',' + this.addressDetails.longitude
-        console.log(geohash)
-        const res = await getSubmitShopping(geohash, this.shopkeyword)
-        console.log(res)
-        this.shopList = res.data
+    shopkeyword () {
+      if (this.flag) {
+        clearTimeout(this.flag)
       } else {
-        this.shopList = []
+        if (this.shopkeyword !== '') {
+          this.flag = setTimeout(async () => {
+            const geohash = this.addressDetails.latitude + ',' + this.addressDetails.longitude
+            // console.log(geohash)
+            const res = await getSubmitShopping(geohash, this.shopkeyword)
+            console.log(res)
+            this.shopList = res.data
+          }, 500)
+        } else {
+          this.shopList = []
+        }
       }
     }
   },
