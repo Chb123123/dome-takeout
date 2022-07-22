@@ -10,13 +10,19 @@
 
 目前程序主要功能已完成
 
+接口数据为随机，图片也为测试图片
+
+### 页面布局
+
+布局采用flex + rem 
+
 ### 项目在线查看地址
 
 - https://chb123123.github.io/dome-takeout/dist/
 
 ### 程序使用的技术栈为
 
-vue-cli + vuex + vue-router + element + axios
+vue-cli + vuex + vue-router + vant + axios
 
 ### 项目接口地址为：
 

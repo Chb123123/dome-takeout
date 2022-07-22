@@ -10,9 +10,9 @@
     {{ index }}
     <a v-for="i in item" :key="i.id" href="javascript:;" class="address" @click="addressBtn(i)">{{ i.name }}</a>
   </a>
-  <div class="position">
+  <!-- <div class="position">
     <span id="A" class="">S</span>
-  </div>
+  </div> -->
   </div>
 </template>
 

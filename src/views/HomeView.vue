@@ -25,6 +25,8 @@
       <van-list
         v-model="loading"
         :finished="finished"
+        :error.sync="error"
+        error-text="请求失败，点击重新加载"
         finished-text="没有更多了"
         @load="onLoad"
       >
@@ -59,6 +61,7 @@ export default {
       // 店铺列表
       shopList: [],
       shopList_1: [],
+      error: false,
       // 是否加载
       loading: true,
       // 数据是否加载完成
