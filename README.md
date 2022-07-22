@@ -16,7 +16,7 @@
 
 布局采用flex + rem 
 
-### 项目在线查看地址
+### 项目在线查看地址(移动端打开有更好的体验)
 
 - https://chb123123.github.io/dome-takeout/dist/
 
