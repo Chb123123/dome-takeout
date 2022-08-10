@@ -79,8 +79,10 @@ export default {
   },
   watch: {
     shopkeyword () {
+      console.log('ss')
       if (this.flag) {
         clearTimeout(this.flag)
+        this.flag = null
       } else {
         if (this.shopkeyword !== '') {
           this.flag = setTimeout(async () => {
@@ -91,6 +93,7 @@ export default {
             this.shopList = res.data
           }, 500)
         } else {
+          this.flag = null
           this.shopList = []
         }
       }

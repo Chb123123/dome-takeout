@@ -4,7 +4,8 @@
   <van-tabbar-item icon="search" to="/submit">搜索</van-tabbar-item>
   <!-- <van-tabbar-item v-if="count == 0" icon="cart-o" to="/cart">订单</van-tabbar-item> -->
   <van-tabbar-item icon="cart-o" to="/cart">订单</van-tabbar-item>
-  <van-tabbar-item icon="friends-o" :dot="isLogin" to="/user">用户</van-tabbar-item>
+  <van-tabbar-item v-if="userAbout" icon="friends-o"  to="/user">用户</van-tabbar-item>
+  <van-tabbar-item v-else icon="friends-o" :dot="isLogin" to="/user">用户</van-tabbar-item>
 </van-tabbar>
 </template>
 

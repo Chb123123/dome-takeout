@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="AppContainer">
     <router-view></router-view>
   </div>
 </template>
@@ -10,6 +10,8 @@ export default {
 }
 </script>
 
-<style>
-
+<style lang="less" scoped>
+  .AppContainer{
+    margin: auto;
+  }
 </style>

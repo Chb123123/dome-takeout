@@ -23,7 +23,8 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
+import { mapMutations, mapState } from 'vuex'
+import { Dialog } from 'vant'
 export default {
   props: {
     // 商店名称
@@ -41,12 +42,32 @@ export default {
     // 餐馆id
     restaurant: {}
   },
+  computed: {
+    ...mapState(['userAbout'])
+  },
   methods: {
     ...mapMutations(['getshopid']),
     getRestaurantId () {
-      this.getshopid(this.restaurant)
+      if (this.userAbout) {
+        this.getshopid(this.restaurant)
+        this.$router.push('/shopInterface')
+      } else {
+        Dialog.confirm({
+          // title: '标题',
+          message: '账号未登入'
+        })
+          .then(() => {
+            // on confirm
+            this.$router.push('/login')
+          })
+          .catch(() => {
+            // on cancel
+          })
+        // Dialog({ message: '提示' })
+      }
+      // this.getshopid(this.restaurant)
       // console.log(this.restaurantId)
-      this.$router.push('/shopInterface')
+      // this.$router.push('/shopInterface')
     }
   }
 }
