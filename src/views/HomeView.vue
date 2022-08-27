@@ -50,6 +50,7 @@ import { getCurrentAddress } from '@/api/home/getCurrentAddressAPI.js'
 import Tabbar from '../utils/tabbar.vue'
 import { Dialog, Toast } from 'vant'
 export default {
+  name: 'myHome',
   components: {
     Takeaway,
     Tabbar,

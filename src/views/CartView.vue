@@ -39,6 +39,7 @@ import MyComp from '@/components/order/completedOrder.vue'
 import Tabbar from '../utils/tabbar.vue'
 import { mapState } from 'vuex'
 export default {
+  name: 'myCart',
   components: {
     Tabbar,
     Order,
