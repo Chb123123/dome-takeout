@@ -40,9 +40,9 @@ export default {
       // 验证码
       verificationCode: '',
       // 用户输入用户名
-      username: '',
-      passwd: '',
-      phone: '',
+      username: 'admin',
+      passwd: '123456',
+      phone: '13782672367',
       // 验证码
       InpoutverificationCode: ''
     }
