@@ -33,7 +33,6 @@ export default {
     lowerShop (item) {
       if (item.count || item.count > 0) {
         item.count--
-        console.log(item)
         this.getshoppingCart(item)
       }
     },
@@ -41,11 +40,9 @@ export default {
     addShop (item) {
       if (item.count) {
         item.count++
-        console.log(item)
         this.getshoppingCart(item)
       } else {
         item.count = 1
-        console.log(item)
         this.getshoppingCart(item)
       }
     }

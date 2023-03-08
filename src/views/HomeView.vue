@@ -92,8 +92,6 @@ export default {
       this.$router.push('/submit')
     },
     async getTakeawayAbout () {
-      // console.log(this.addressDetails.latitude, this.num)
-      // console.log(this.$store.state.addressDetails.longitude)
       const res = await TackawayAboutList(this.address.longitude, this.address.latitude, this.num, this.order_by)
       this.shopList = res.data
       this.shopList_1 = res.data
@@ -109,8 +107,6 @@ export default {
     // 获取商品导航栏
     async ShopNavBar () {
       const res = await getShopNavbar()
-      // console.log(res.data)
-      // this.shopNavList = res.data
       let navList = []
       res.data.forEach((item, index) => {
         navList.push(item)
@@ -123,7 +119,6 @@ export default {
     // 获取当前所在城市
     async getNewCity () {
       const res = await getCurrentAddress()
-      // console.log(res.data)
       if (this.detailedAddress) {
         this.address = this.detailedAddress
         this.getTakeawayAbout(this.detailedAddress.longitude, this.detailedAddress.latitude)
@@ -175,11 +170,9 @@ export default {
   },
   created () {
     // 获取用户信息
-    console.log(JSON.parse(localStorage.getItem('elementUserInfo')))
     const userInfo = JSON.parse(localStorage.getItem('elementUserInfo'))
     this.getUserAbout(userInfo)
     this.getNewCity()
-    // this.getTakeawayAbout()
     this.ShopNavBar()
     if (this.showHint) {
       Dialog.alert({

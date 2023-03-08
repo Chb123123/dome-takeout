@@ -71,13 +71,11 @@ export default {
     async onLoad () {
       this.num += 20
       const res = await getOrderList(20, this.num)
-      // console.log(res.data)
       this.notFinish = [...this.notFinish, ...res.data]
       this.loading = false
     },
     async getOrderLiet () {
       const res = await getOrderList(20, 0)
-      // console.log(res.data)
       if (this.completedOrder) {
         this.orderList = this.completedOrder
       }

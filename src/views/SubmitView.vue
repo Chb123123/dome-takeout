@@ -65,7 +65,6 @@ export default {
     },
     // 点击搜索获取搜索关键字
     shopname (keyword) {
-      console.log(keyword)
       this.shopkeyword = ''
       this.shopList = []
       this.gethistorySubmit(keyword)
@@ -79,7 +78,6 @@ export default {
   },
   watch: {
     shopkeyword () {
-      console.log('ss')
       if (this.flag) {
         clearTimeout(this.flag)
         this.flag = null
@@ -87,9 +85,7 @@ export default {
         if (this.shopkeyword !== '') {
           this.flag = setTimeout(async () => {
             const geohash = this.addressDetails.latitude + ',' + this.addressDetails.longitude
-            // console.log(geohash)
             const res = await getSubmitShopping(geohash, this.shopkeyword)
-            console.log(res)
             this.shopList = res.data
           }, 500)
         } else {

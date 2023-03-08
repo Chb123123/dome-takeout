@@ -121,7 +121,6 @@ export default {
           checkedShop: this.checkedShopList
         }
         this.getOrderElement(data)
-        console.log(data)
       } else {
         Toast.fail('余额不足')
       }

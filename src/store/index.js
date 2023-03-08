@@ -85,8 +85,6 @@ export default new Vuex.Store({
     },
     // 当用户点击提交订单时，扣除选中的红包
     clearRedEvnelope (state, id) {
-      console.log(id)
-      console.log(state.userUseRedEvnelope)
       // eslint-disable-next-line array-callback-return
       state.userUseRedEvnelope.some((item, index) => {
         if (item.id === id) {

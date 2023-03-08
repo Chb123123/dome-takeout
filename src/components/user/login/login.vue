@@ -17,10 +17,6 @@
       <div class="UserverificationCode"><span>输入验证码:</span> <input type="text" name="" id="" placeholder="输入验证码" v-model="InpoutverificationCode"><div class="verificationCodeImg"><img :src="verificationCode.code" alt="图片加载失败"><div class="NotSee" @click="notSee"><div class="refresh"><van-icon name="replay" /></div><span>看不清</span><span>换一张</span></div></div></div>
       <button class="loginBtn" @click="loginBtn">登入</button>
     </div>
-  <!-- <va-n-notice-bar
-  wrapable
-  text="当前程序中的数据全部都是虚拟的，登入的信息不需要填写真实的数据，填写的数据不会用于其他用途,注意api无法识别验证码"
-/> -->
   <div class="information">
     <van-notice-bar mode="closeable" text="登录的信息无需真实，符合格式即可" />
   </div>
@@ -55,7 +51,6 @@ export default {
     async init () {
       const res = await getverificationCode()
       this.verificationCode = res.data
-      console.log(res.data)
     },
     // 点击登入按钮，前往用户首页
     async loginBtn () {
@@ -66,7 +61,6 @@ export default {
           alert('手机号码有误')
         } else {
           const res = await loginApi(this.username, this.passwd, this.InpoutverificationCode)
-          console.log(res)
           this.$router.push('/user')
           const user = { username: this.username, passwd: this.passwd, InpoutverificationCode: this.InpoutverificationCode, phone: this.phone }
           this.getUserAbout(user)
@@ -83,7 +77,6 @@ export default {
     async notSee () {
       const res = await getverificationCode()
       this.verificationCode = res.data
-      console.log(res.data)
     }
   },
   created () {

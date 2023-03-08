@@ -43,7 +43,6 @@ export default {
     }
   },
   created () {
-    console.log(this.userCheckedShop)
     this.shopPingList = this.userCheckedShop
     this.shopOrderElement = this.OrderElement
   }
