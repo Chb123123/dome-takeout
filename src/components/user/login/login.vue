@@ -72,8 +72,12 @@ export default {
           this.getUserAbout(user)
         }
       }
-      // Toast.success('成功文案')
-      console.log('登入成功')
+      const userInfo = {
+        username: this.username,
+        passWord: this.passwd,
+        price: 500
+      }
+      localStorage.setItem('elementUserInfo', JSON.stringify(userInfo))
     },
     // 点击换一张，重新请求验证码
     async notSee () {

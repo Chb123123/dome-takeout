@@ -32,7 +32,7 @@ export default new Vuex.Store({
     // 完成的订单列表
     completedOrder: [],
     // 用户余额
-    userBalance: 200
+    userBalance: 0
   },
   getters: {
   },
@@ -42,6 +42,7 @@ export default new Vuex.Store({
     },
     getUserAbout (state, object) {
       state.userAbout = object
+      state.userBalance = object.price
     },
     newAddress (state, object) {
       state.addressDetails = object

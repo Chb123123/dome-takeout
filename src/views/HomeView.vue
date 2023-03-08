@@ -86,7 +86,7 @@ export default {
     ...mapState(['detailedAddress', 'addressDetails', 'showHint'])
   },
   methods: {
-    ...mapMutations(['newAddress', 'isShowHint']),
+    ...mapMutations(['newAddress', 'isShowHint', 'getUserAbout']),
     // 前往搜索组件
     gotoSubmitCom () {
       this.$router.push('/submit')
@@ -174,6 +174,10 @@ export default {
     }
   },
   created () {
+    // 获取用户信息
+    console.log(JSON.parse(localStorage.getItem('elementUserInfo')))
+    const userInfo = JSON.parse(localStorage.getItem('elementUserInfo'))
+    this.getUserAbout(userInfo)
     this.getNewCity()
     // this.getTakeawayAbout()
     this.ShopNavBar()
