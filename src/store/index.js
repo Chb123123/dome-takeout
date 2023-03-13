@@ -42,7 +42,9 @@ export default new Vuex.Store({
     },
     getUserAbout (state, object) {
       state.userAbout = object
-      state.userBalance = object.price
+      if (object) {
+        state.userBalance = object.price
+      }
     },
     newAddress (state, object) {
       state.addressDetails = object
@@ -107,6 +109,10 @@ export default new Vuex.Store({
     // 当点击结算时减少用户余额
     reduceBalance (state, price) {
       state.userBalance -= price
+      const user = JSON.parse(localStorage.getItem('elementUserInfo'))
+      user.price = state.userBalance
+      localStorage.removeItem('elementUserInfo')
+      localStorage.setItem('elementUserInfo', JSON.stringify(user))
     }
   },
   actions: {

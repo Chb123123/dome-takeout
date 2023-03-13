@@ -36,7 +36,7 @@ export default {
       // 验证码
       verificationCode: '',
       // 用户输入用户名
-      username: 'admin',
+      username: '王宝强',
       passwd: '123456',
       phone: '13782672367',
       // 验证码
@@ -61,17 +61,21 @@ export default {
           alert('手机号码有误')
         } else {
           const res = await loginApi(this.username, this.passwd, this.InpoutverificationCode)
+          console.log(res)
           this.$router.push('/user')
-          const user = { username: this.username, passwd: this.passwd, InpoutverificationCode: this.InpoutverificationCode, phone: this.phone }
+          const user = { username: this.username, passwd: this.passwd, InpoutverificationCode: this.InpoutverificationCode, phone: this.phone, price: 500 }
+          // 将用户信息保存在本地
+          localStorage.setItem('elementUserInfo', JSON.stringify(user))
           this.getUserAbout(user)
         }
       }
-      const userInfo = {
-        username: this.username,
-        passWord: this.passwd,
-        price: 500
-      }
-      localStorage.setItem('elementUserInfo', JSON.stringify(userInfo))
+      // const userInfo = {
+      //   username: this.username,
+      //   passWord: this.passwd,
+      //   phone: this.phone,
+      //   price: 500
+      // }
+      // this.getUserAbout(userInfo)
     },
     // 点击换一张，重新请求验证码
     async notSee () {

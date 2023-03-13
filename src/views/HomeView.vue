@@ -171,7 +171,10 @@ export default {
   created () {
     // 获取用户信息
     const userInfo = JSON.parse(localStorage.getItem('elementUserInfo'))
-    this.getUserAbout(userInfo)
+    console.log(userInfo)
+    if (userInfo) {
+      this.getUserAbout(userInfo)
+    }
     this.getNewCity()
     this.ShopNavBar()
     if (this.showHint) {

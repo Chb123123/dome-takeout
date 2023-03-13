@@ -65,9 +65,12 @@ export default {
         // background-color: red;
         // margin-right: .5333rem;
         border: 1px solid #BEC0C2;
+        border-radius: .2667rem;
+        overflow: hidden;
         > img{
           width: 100%;
           height: 100%;
+          // border-radius: .2667rem;
         }
       }
       .foodAbout{
