@@ -7,7 +7,7 @@
         <div class="shopImg"><img :src="'http://elm.cangdu.org/img/' + shop.image_path" alt=""></div>
         <div class="shoptitle">{{ shop.name }}</div>
         <div class="shopscore"><span class="shopscorestyle">{{ shop.rating }}分</span><span style="margin-right: .2667rem;">商家配送时间为{{shop.order_lead_time}}</span><span>月售{{shop.rating_count}}</span></div>
-        <div class="coupon" @click="aaa"><van-icon name="star" style="font-size: .64rem;margin-right: .2667rem;"/>￥4无门槛</div>
+        <div class="coupon" @click="getFavorable"><van-icon name="star" style="font-size: .64rem;margin-right: .2667rem;"/>￥4无门槛</div>
         <div class="delivery">{{ shop.delivery_mode.text }}</div>
         <div class="delivery">配送费优惠</div>
       </div>
@@ -36,19 +36,20 @@
     </div>
     <div class="settlement">
       <div class="shoppingicon" @click="showAction">
-        <van-icon name="cart" />
+        <van-icon name="cart" ref="cart"/>
         <div v-if="shopCount != 0" class="shopCount">{{ shopCount }}</div>
         </div>
       <div class="settlementMoney">
         <span class="total-price">￥{{ sunMoney }}</span>
         <span class="delivery-fee">预计配送费5￥</span>
       </div>
-      <div v-if="sunMoney <= 15" class="money">15元起送</div>
+      <div v-if="sunMoney < 15" class="money">15元起送</div>
       <div v-else class="goTosettlementMoney" @click="gotoSettlement">去结算</div>
       </div>
       <van-action-sheet v-model="show" :closeable="false" title="已选商品">
       <div class="content">
-        <CheckedFood v-for="item in checkedFoods" :key="item._id" :foodsImg="item.image_path" :title="item.name" :price="item.specfoods[0].price" :count="item.__v"></CheckedFood>
+        <CheckedFood v-for="item in checkedFoods" :key="item._id" :foodAbout="item" :foodsImg="item.image_path" :title="item.name" :price="item.specfoods[0].price" @selectFood="changeFoods" :count="item.__v"></CheckedFood>
+        <div v-if="!checkedFoods || checkedFoods.length === 0" class="default">暂无商品</div>
       </div>
     </van-action-sheet>
   </div>
@@ -113,13 +114,29 @@ export default {
   },
   methods: {
     ...mapMutations(['getUserCheckedShop']),
-    aaa () {
+    getFavorable () {
       Toast.fail('无法领取')
+    },
+    changeFoods (obj) {
+      console.log(obj)
+      console.log(this.initshop.foods)
+      if (this.initshop.foods.length > 0) {
+        for (let i = 0; i < this.initshop.foods.length; i++) {
+          if (this.initshop.foods[i].item_id === obj.item_id) {
+            console.log(this.initshop.foods[i])
+            if (obj.isAdd) {
+              this.shopCount++
+              this.sunMoney += this.initshop.foods[i].specfoods[0].price
+            } else {
+              this.sunMoney -= this.initshop.foods[i].specfoods[0].price
+              this.shopCount--
+            }
+          }
+        }
+      }
     },
     // 判断当前滚动条距离屏幕的距离
     handleScrollx () {
-      // console.log(window.pageYOffset)
-      // console.log(this.$refs.obtain.getBoundingClientRect().top)
       if (window.pageYOffset >= this.obtainTop) {
         this.obtainClass = false
       } else {
@@ -216,14 +233,11 @@ export default {
               if (this.checkedFoods.length === 0) {
                 this.checkedFoods.push(item)
               } else {
-                // eslint-disable-next-line array-callback-return
                 for (const i in this.checkedFoods) {
-                  // console.log(this.checkedFoods[i])
                   if (this.checkedFoods[i]._id === item._id) {
                     this.checkedFoods.splice(i, 1)
                   }
                 }
-                // console.log(item.__v !== 0)
                 this.checkedFoods.push(item)
               }
               return true
@@ -233,7 +247,6 @@ export default {
               if (item.__v > 0) {
                 item.__v += val[0]
                 this.sunMoney -= item.specfoods[0].price
-                // this.flag = true
                 this.shopCount--
                 for (const i in this.checkedFoods) {
                   // console.log(this.checkedFoods[i])
@@ -415,6 +428,9 @@ export default {
         text-align: center;
         font-size: 1.6rem;
         color: #24ACF2;
+        .cart {
+          animation: move 500ms ease-in-out;
+        }
         .shopCount{
           position: absolute;
           top: .1333rem;
@@ -483,10 +499,22 @@ export default {
       }
     }
     .content{
-      height: 6.1333rem;
+      // height: 6.1333rem;
+      min-height: 6.1333rem;
+      max-height: 70vh;
       margin-bottom: 1.4667rem;
       overflow-y: auto;
       padding-bottom: 1.0667rem;
+    }
+    .default {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      font-size: .64rem;
+      width: 100%;
+      color: #888;
+      // border: 1px solid #ccc;
     }
     .ificationFixed{
         position: fixed;
@@ -519,5 +547,19 @@ export default {
         height: 1.3333rem;
         width: 1.3333rem;
       }
+  }
+  @keyframes move {
+    25% {
+      transform: scale(0.8);
+    }
+    50% {
+      transform: scale(1.1);
+    }
+    75% {
+      transform: scale(0.9);
+    }
+    100% {
+      transform: scale(1);
+    }
   }
 </style>

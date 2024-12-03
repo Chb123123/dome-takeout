@@ -6,14 +6,25 @@
     <div class="foodAbout">
       <div class="foodTitle">{{ title }}</div>
       <div class="price">￥{{ price }}</div>
-      <div class="count">{{ count }}</div>
+      <div class="count">
+        <van-stepper button-size=".8rem" :min="1" :value="foodCount" theme="round" disable-input @change="selectFood"/>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 export default {
+  computed: {
+    foodCount () {
+      return this.count
+    }
+  },
   props: {
+    foodAbout: {
+      type: Object,
+      default: () => {}
+    },
     foodsImg: {},
     // 选中商品的价格
     price: {
@@ -24,6 +35,21 @@ export default {
     // 选中商品的数量
     count: {
       default: 0
+    }
+  },
+  methods: {
+    selectFood (val) {
+      // console.log(this.foodAbout)
+      // console.log(this.count)
+      const countInfo = {
+        isAdd: true,
+        count: val,
+        item_id: this.foodAbout.item_id
+      }
+      if (this.count > val) {
+        countInfo.isAdd = false
+      }
+      this.$emit('selectFood', countInfo)
     }
   }
 }
@@ -75,8 +101,8 @@ export default {
         position: absolute;
         right: .2667rem;
         bottom: 0;
-        width: .8rem;
-        height: .5333rem;
+        width: 5.3333rem;
+        height: .8rem;
         line-height: .5333rem;
         padding: .0533rem .1333rem;
         // background-color: #0BB7F7;
